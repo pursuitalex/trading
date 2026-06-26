@@ -1,0 +1,245 @@
+/* ============================================================
+   WhyIbkr — "Ваш капітал на платформі брокера IBKR" (6462:17851)
+   ============================================================ */
+
+.ibkr {
+  background: #f0f3ff;
+  padding-block: clamp(3.5rem, 9vw, 8.75rem); /* → 140px at desktop */
+}
+.ibkr .container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.ibkr__grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  align-items: stretch; /* left card matches the right 2×2 block height */
+}
+
+/* ---- Right: 2×2 feature cards ---- */
+.ibkr__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.ibkr-card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 33px 65px 33px 33px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(224, 229, 235, 0.5);
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 6px 12px -3px rgba(0, 0, 0, 0.05);
+}
+.ibkr-card__body {
+  margin-top: auto; /* push title+text to the bottom (icon stays on top) */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* squircle icon backing (matches Figma Vector) */
+.ibkr-card__icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%),
+    radial-gradient(95% 90% at 50% 100%, #546dff 0%, #0d41b9 100%);
+  border: 1.2px solid #dbe2f8;
+  box-shadow:
+    0 2px 4px rgba(128, 146, 255, 0.2),
+    0 11px 27px rgba(26, 84, 231, 0.06),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9);
+}
+.ibkr-card__icon img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+.ibkr-card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+  color: #000;
+}
+.ibkr-card__text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4a4d61;
+}
+.ibkr-card__text b {
+  font-weight: 600;
+  color: #1a1e35;
+}
+
+/* ---- Left: flow diagram card ---- */
+.ibkr__diagram {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* distribute title / flow / note over the full height */
+  gap: 24px;
+  padding: 33px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(224, 229, 235, 0.5);
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 6px 12px -3px rgba(0, 0, 0, 0.05);
+}
+.ibkr__diagram-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.3;
+  letter-spacing: -0.4px;
+  color: #000;
+  text-align: center;
+}
+.ibkr__flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.ibkr__node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ibkr__badge {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+}
+.ibkr__badge--trader {
+  background:
+    linear-gradient(rgba(28, 105, 227, 0.1), rgba(28, 105, 227, 0.1)),
+    radial-gradient(circle at 50% 120%, #6783ff, #475ffa);
+}
+.ibkr__badge--ibkr {
+  background: linear-gradient(180deg, rgba(251, 44, 54, 0.05), rgba(251, 44, 54, 0.1));
+  border: 1px solid rgba(251, 44, 54, 0.2);
+}
+.ibkr__node-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #0f171f;
+}
+
+/* connection: gradient track + dots + "Encrypted API" pill */
+.ibkr__conn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ibkr__conn-track {
+  position: relative;
+  width: 192px;
+  height: 32px;
+}
+.ibkr__conn-track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 15px;
+  height: 2px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #1c69e3, rgba(28, 105, 227, 0.5) 50%, #d81222);
+}
+.ibkr__dot {
+  position: absolute;
+  top: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.ibkr__dot--b1 {
+  left: 8px;
+  background: #1c69e3;
+}
+.ibkr__dot--b2 {
+  left: 50px;
+  background: rgba(28, 105, 227, 0.7);
+}
+.ibkr__dot--b3 {
+  left: 92px;
+  background: rgba(28, 105, 227, 0.5);
+}
+.ibkr__dot--g {
+  right: 50px;
+  background: rgba(0, 201, 80, 0.7);
+}
+.ibkr__dot--r {
+  right: 8px;
+  background: #d81222;
+}
+.ibkr__conn-badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 99px;
+  background: #fff;
+  border: 1px solid #e0e5eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #5b646f;
+  white-space: nowrap;
+}
+.ibkr__conn-badge svg {
+  color: #1c69e3;
+}
+.ibkr__conn-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  color: #5b646f;
+}
+.ibkr__note {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(28, 105, 227, 0.1);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: #06326b;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .ibkr__grid {
+    grid-template-columns: 1fr;
+  }
+  .ibkr__cards {
+    grid-template-columns: 1fr;
+  }
+  .ibkr-card {
+    padding: 28px;
+  }
+}

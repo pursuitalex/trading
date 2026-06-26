@@ -1,0 +1,352 @@
+/* ============================================================
+   Cases — "Реальні рахунки. Реальні цифри." (Figma 6462:17954)
+   ============================================================ */
+
+.cases .container {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 5vw, 5rem); /* 80px heading → cards */
+}
+
+/* ---- Heading row ---- */
+.cases__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+.cases__intro {
+  max-width: 684px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+.cases__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 7px 12px;
+  border-radius: 28px;
+  background: #e4ecff;
+  border: 1px solid rgba(28, 105, 227, 0.2);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  color: #0b33b4;
+}
+.cases__badge svg {
+  color: #1c69e3;
+}
+.cases__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw, 2.75rem); /* 44px */
+  line-height: 1.15;
+  letter-spacing: -0.88px;
+  color: #000;
+}
+.cases__lead {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.45;
+  color: #4a4d61;
+}
+.cases__cta {
+  flex: none;
+  width: 281px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.cases__cta-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+  text-align: right;
+  color: #000;
+}
+.cases__cta-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cases__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.16s ease;
+}
+.cases__btn--outline {
+  border: 1px solid #686a7b;
+  color: #1d213a;
+}
+.cases__btn--outline:hover {
+  border-color: #1d213a;
+}
+.cases__btn--solid {
+  background: var(--brand-btn);
+  color: #fff;
+}
+.cases__btn--solid:hover {
+  background: var(--brand-btn-hover);
+  transform: translateY(-1px);
+}
+
+/* ---- Cards marquee (auto-scrolling ticker) ---- */
+.cases__marquee {
+  /* sits outside .container → already full-bleed; 80px gap to heading restored here */
+  width: 100%;
+  margin-top: 80px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+.cases__track {
+  display: flex;
+  width: max-content;
+  padding-block: 12px;
+  animation: casesScroll 60s linear infinite;
+}
+@keyframes casesScroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cases__track {
+    animation: none;
+  }
+}
+.case {
+  flex: 0 0 clamp(300px, 80vw, 540px);
+  margin-right: 24px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: #fff;
+  border: 2px solid #e0e6ff;
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 6px 12px -3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* top block */
+.case__top {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  background: linear-gradient(155deg, rgba(28, 105, 227, 0.05), rgba(28, 105, 227, 0));
+}
+.case__top-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.case__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+  color: #000;
+}
+.case__num {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 14px;
+  background: rgba(28, 105, 227, 0.1);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  color: #1c69e3;
+}
+.case__stat {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+.case__meta {
+  order: -1; /* keep on the left though it is second in DOM */
+  flex: 1 1 0;
+  min-width: 0;
+  height: 152px; /* match the green profit card */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.case__meta-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 13px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(224, 229, 235, 0.5);
+}
+.case__meta-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #5b646f;
+}
+.case__meta-label svg {
+  color: #9799a4;
+}
+.case__meta-value {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 16px;
+  color: #0f171f;
+}
+.case__profit {
+  flex: 2 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end; /* graph & text sit on the bottom */
+  gap: 24px;
+  height: 152px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0, 188, 125, 0.2);
+  overflow: hidden;
+}
+.case__profit-col {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* badge top, profit text bottom */
+  align-items: flex-start;
+}
+.case__profit-badge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 8px;
+  border-radius: 14px;
+  background: rgba(0, 188, 125, 0.2);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  color: #009966;
+}
+.case__profit-main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.case__profit-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #5b646f;
+}
+.case__profit-value {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  color: #009966;
+}
+.case__spark {
+  flex: none;
+  width: 100px;
+  height: 40px;
+  border-radius: 0 0 12px 0; /* matches the Figma graph's bottom-right radius */
+}
+
+/* quote block */
+.case__quote {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 32px;
+}
+.case__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.case__avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(28, 105, 227, 0.1);
+  color: #1c69e3;
+}
+.case__author-meta {
+  display: flex;
+  flex-direction: column;
+}
+.case__name {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0f171f;
+}
+.case__verified {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #5b646f;
+}
+.case__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00bc7d;
+}
+.case__text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  color: #4a4d61;
+}
+.case__date {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #9799a4;
+}
+
+@media (max-width: 900px) {
+  .cases__head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+  }
+  .cases__cta {
+    width: 100%;
+  }
+  .cases__cta-title {
+    text-align: left;
+  }
+  .cases__marquee {
+    margin-top: 48px;
+  }
+}

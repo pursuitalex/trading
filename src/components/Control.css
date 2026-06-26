@@ -1,0 +1,177 @@
+/* ============================================================
+   Control — "Ваш капітал під повним контролем" (Figma 6462:17734)
+   Dashboard image + live "Останні операції" feed
+   ============================================================ */
+
+/* transparent so the fixed blue layer fades through it (no hard edge); page bg shows once it's gone */
+.control .container {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.control__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: stretch; /* ops matches the dashboard's height */
+}
+
+/* Left — dashboard screenshot */
+.control__dash {
+  overflow: hidden;
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 6px 12px -3px rgba(0, 0, 0, 0.05);
+}
+.control__dash img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Right — operations feed */
+.control__ops {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 6px 12px -3px rgba(0, 0, 0, 0.05);
+}
+.control__ops-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 0;
+}
+/* list fades out at the bottom (more activity below) */
+.control__ops::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 96px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+  pointer-events: none;
+}
+.control__ops-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 24px 12px;
+}
+.control__ops-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  color: #1a1e35;
+}
+.control__ops-badge {
+  flex: none;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #d0fae5;
+  color: #007a55;
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+}
+.control__ops-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.control__op {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(239, 242, 245, 0.5);
+}
+.control__op-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.control__op-ic--buy {
+  background: #dbeafe;
+}
+.control__op-ic--profit {
+  background: #d0fae5;
+}
+.control__op-body {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.control__op-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.control__op-line strong {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0f171f;
+}
+.control__op-ticker {
+  flex: none;
+  padding: 3px 9px;
+  border: 1px solid rgba(15, 23, 31, 0.2);
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 16px;
+  color: #0f171f;
+}
+.control__op-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  color: #5b646f;
+}
+.control__op-time {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  color: #5b646f;
+}
+
+@media (max-width: 900px) {
+  .control__grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* desktop: ops content is absolute so it doesn't grow the row — its card height
+   tracks the dashboard, and overflowing items clip under the bottom fade */
+@media (min-width: 901px) {
+  .control__ops-inner {
+    position: absolute;
+    inset: 0;
+  }
+}

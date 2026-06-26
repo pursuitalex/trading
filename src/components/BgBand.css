@@ -1,0 +1,351 @@
+/* ============================================================
+   Final screen — full-viewport blue background (Figma 6501:6310)
+   + "Як працює наш алгоритм" content (Figma 6506:6455).
+   Fixed layer behind content; opacity tied to scroll so the body
+   background appears to crossfade to blue.
+   ============================================================ */
+
+.bgfade {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* behind content, above the (propagated) page background */
+  pointer-events: none;
+  /* Figma radial (node 6501:6310): bright core at bottom-centre → deep navy at top corners */
+  background: radial-gradient(circle at 50% 100%, #4055db 0%, #1c45b3 23%, #153486 58.4%, #082166 100%);
+}
+.bgfade__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 36px 36px; /* square grid reduced ~30% (52 → 36) */
+  /* grid gently fades out toward the edges */
+  -webkit-mask-image: radial-gradient(125% 110% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(125% 110% at 50% 50%, #000 55%, transparent 100%);
+  /* smooth diagonal drift, same style as the hero grid */
+  animation: bgGridDrift 4.44s linear infinite;
+}
+@keyframes bgGridDrift {
+  to {
+    background-position:
+      36px 36px,
+      36px 36px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bgfade__grid {
+    animation: none;
+  }
+}
+
+/* ---------------- "Як працює наш алгоритм" ---------------- */
+.algo {
+  position: relative;
+  min-height: 100vh; /* fills the viewport */
+  display: grid;
+  align-content: center; /* centre when short; grows with tall content, no shrink/overflow */
+  color: #fff;
+}
+.algo__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.algo__head {
+  text-align: center;
+  padding-top: clamp(72px, 10vw, 140px);
+}
+.algo__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 3.2vw, 3rem); /* 48px desktop */
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #ffffff 30%, #b296ff 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.algo__lead {
+  max-width: 670px;
+  margin: 20px auto 0;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.45;
+  color: #efe6fd;
+}
+
+/* Decorative connectors — drawn from the text down to the icons */
+.algo__lines {
+  position: relative;
+  z-index: 2; /* keep the lines + nodes above the cards below them */
+  display: block;
+  width: 100%;
+  height: 72px;
+  margin-top: clamp(0.5rem, 1.5vw, 1.25rem);
+  margin-bottom: -8px;
+  padding-inline: calc((100% - 48px) / 6); /* span centre-of-card1 → centre-of-card3 */
+  overflow: visible;
+}
+.algo__line {
+  fill: none;
+  stroke: #cdc6ff;
+  stroke-width: 1.5;
+  stroke-dasharray: 2 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.algo__node {
+  fill: #fff;
+  stroke: #5900d9;
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  filter: drop-shadow(0 3px 5px rgba(40, 20, 80, 0.4));
+}
+
+.algo__steps {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  width: 100%;
+  margin-top: clamp(0.25rem, 0.8vw, 0.6rem);
+}
+.algo-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: clamp(2rem, 3vw, 3rem) clamp(1.5rem, 2.8vw, 2.75rem);
+  border-radius: clamp(24px, 2.5vw, 40px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 16px 34px -16px rgba(8, 16, 45, 0.3);
+  text-align: center;
+  color: var(--ink);
+}
+.algo-card__icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 22px; /* squircle, matching Figma */
+  /* Figma fill: white→white(.9) over a blue radial rising from the bottom */
+  background:
+    linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%),
+    radial-gradient(95% 90% at 50% 100%, #546dff 0%, #0d41b9 100%);
+  border: 1.2px solid #dbe2f8;
+  box-shadow:
+    0 2px 4px rgba(128, 146, 255, 0.2),
+    0 11px 27px rgba(26, 84, 231, 0.06),
+    inset 0 1.5px 1.5px rgba(255, 255, 255, 0.9);
+}
+.algo-card__icon img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.algo-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+.algo-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.algo-card__tag {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  color: #475ffa;
+}
+.algo-card__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: -0.44px;
+  color: #000;
+}
+.algo-card__text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #4a4d61;
+}
+
+/* ---------------- Comparison block ---------------- */
+.compare {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  margin-top: 40px;
+}
+/* Left glass panel */
+.compare__aside {
+  flex: 0 1 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px;
+  border-radius: 24px;
+  background: rgba(20, 17, 69, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+}
+.compare__aside-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.48px;
+  color: #fff;
+}
+.compare__features {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.compare__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.compare__emoji {
+  flex: none;
+  font-size: 24px;
+  line-height: 28px;
+}
+.compare__features p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  color: #fff;
+}
+.compare__features strong {
+  font-weight: 600;
+}
+
+/* Right table */
+.compare__table-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+}
+.compare__table {
+  min-width: 560px;
+  height: 100%; /* fill the wrap so it matches the aside height */
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 0.667px solid #e5e7eb;
+  border-radius: 24px;
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+.compare__row {
+  display: flex;
+  align-items: center;
+  border-bottom: 0.667px solid #e5e7eb;
+}
+.compare__row:not(.compare__row--head) {
+  flex: 1 1 0; /* data rows share the height evenly so the card fills */
+}
+.compare__row:last-child {
+  border-bottom: none;
+}
+.compare__row--head {
+  background: rgba(28, 105, 227, 0.05);
+}
+.compare__cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 24px;
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+.compare__cell--feat {
+  flex: 0 0 30%;
+  max-width: 196px;
+  font-weight: 600;
+  color: #1a1e35;
+}
+.compare__cell--col {
+  flex: 1 1 0;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.32px;
+  color: #000;
+}
+.compare__cell--human {
+  flex: 1 1 0;
+  min-width: 0;
+  font-weight: 500;
+  color: #1a1e35;
+}
+.compare__cell--algo {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.compare__no {
+  flex: none;
+  color: #d41b5a;
+}
+.compare__yes {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px 8px 10px;
+  border-radius: 30px;
+  background: #edf7ee;
+  font-weight: 500;
+  color: #1a1e35;
+}
+.compare__yes svg {
+  flex: none;
+  color: #459f49;
+}
+.compare__hicon {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+}
+.compare__hicon--human {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #eef1f6;
+  color: #7e879c;
+}
+
+@media (max-width: 900px) {
+  .algo__steps {
+    flex-direction: column;
+  }
+  .algo__lines {
+    display: none;
+  }
+  .compare {
+    flex-direction: column;
+  }
+  .compare__aside {
+    flex: none;
+    width: 100%;
+  }
+}
