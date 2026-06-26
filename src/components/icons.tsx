@@ -199,6 +199,21 @@ export const Info = (p: IconProps) => (
   </Svg>
 )
 
+export const Eye = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+    <circle cx="12" cy="12" r="3" />
+  </Svg>
+)
+
+export const EyeOff = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.4 0 10 7 10 7a18 18 0 0 1-3.1 3.9M6.1 6.2A17.8 17.8 0 0 0 2 12s3.6 7 10 7a10.4 10.4 0 0 0 3.9-.7" />
+    <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+    <path d="m3 3 18 18" />
+  </Svg>
+)
+
 export const Rocket = (p: IconProps) => (
   <Svg {...p}>
     <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09Z" />

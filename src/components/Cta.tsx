@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { Reveal } from './primitives'
 import { Rocket } from './icons'
 import { viewportOnce } from '../lib/motion'
@@ -39,10 +40,10 @@ export function Cta() {
             </Reveal>
 
             <Reveal className="cta__btn-wrap" variant="fadeUp" delay={0.15}>
-              <a href="#" className="cta__btn">
+              <Link to="/register" className="cta__btn">
                 <Rocket size={24} />
                 <span>Запустити Алготрейдинг</span>
-              </a>
+              </Link>
             </Reveal>
 
             <Reveal className="cta__perks" variant="fadeUp" delay={0.2}>

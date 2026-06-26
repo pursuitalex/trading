@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Reveal } from './primitives'
 import { BarChart, Calendar, TrendingUp, User, Wallet } from './icons'
 import { useMarqueeSpeed } from '../lib/marquee'
@@ -21,6 +22,11 @@ const CASES: Case[] = [
   { num: 2, title: 'Стабільність на волатильному ринку', pct: '+34.2%', profit: '+3,420 $', start: '10,000 $', period: '6 місяців', name: 'Олександр М.', date: 'Вересень — Лютий' },
   { num: 1, title: 'Масштабування капіталу', pct: '+34.2%', profit: '+3,420 $', start: '10,000 $', period: '6 місяців', name: 'Олександр М.', date: 'Вересень — Лютий' },
 ]
+
+// Four identical copies so a full set can scroll off without ever emptying the
+// row: the marquee advances exactly one copy per loop (see Cases.css → -25%),
+// leaving three copies on screen — seamless even on ultrawide displays.
+const LOOP: Case[] = [...CASES, ...CASES, ...CASES, ...CASES]
 
 function CaseCard({ c }: { c: Case }) {
   return (
@@ -121,12 +127,12 @@ export function Cases() {
               успішним кейсом?
             </p>
             <div className="cases__cta-btns">
-              <a href="#" className="cases__btn cases__btn--outline">
+              <Link to="/register" className="cases__btn cases__btn--outline">
                 Демо-кабінет
-              </a>
-              <a href="#" className="cases__btn cases__btn--solid">
+              </Link>
+              <Link to="/register" className="cases__btn cases__btn--solid">
                 Реєстрація
-              </a>
+              </Link>
             </div>
           </Reveal>
         </div>
@@ -140,7 +146,7 @@ export function Cases() {
         onMouseLeave={marquee.onMouseLeave}
       >
         <div className="cases__track">
-          {[...CASES, ...CASES].map((c, i) => (
+          {LOOP.map((c, i) => (
             <CaseCard c={c} key={i} />
           ))}
         </div>

@@ -1,4 +1,4 @@
-import { motion, useInView } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { Calendar, ChevronDown, ChevronLeft, ChevronRight, Check, Info, TrendingUp } from './icons'
 import { CountUp, Reveal } from './primitives'
@@ -146,8 +146,6 @@ const CHART: number[] = (() => {
 })()
 
 function HistoryChart() {
-  const ref = useRef<SVGSVGElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
   const W = 1000
   const H = 300
   const pts = CHART.map((v, i) => ({ x: (i / (CHART.length - 1)) * W, y: H - (v / MAXY) * H }))
@@ -164,7 +162,7 @@ function HistoryChart() {
         ))}
       </div>
       <div className="calc-chart__plot">
-        <svg ref={ref} className="calc-chart__svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+        <svg className="calc-chart__svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="calcFill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0" stopColor="#1c69e3" stopOpacity="0.16" />
@@ -179,7 +177,7 @@ function HistoryChart() {
             d={area}
             fill="url(#calcFill)"
             initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
+            animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           />
           <motion.path
@@ -188,7 +186,7 @@ function HistoryChart() {
             fill="none"
             vectorEffect="non-scaling-stroke"
             initial={{ pathLength: 0 }}
-            animate={inView ? { pathLength: 1 } : {}}
+            animate={{ pathLength: 1 }}
             transition={{ duration: 1.7, ease: [0.22, 1, 0.36, 1] }}
           />
         </svg>
@@ -381,29 +379,79 @@ export function Calculator() {
           </motion.div>
         </div>
 
-        {/* Historical chart */}
-        <Reveal className="calc-card calc-history" delay={0.1}>
-          <div className="calc-history__row">
-            <div className="calc-history__figures">
-              <div className="calc-history__col">
-                <span className="calc-history__muted">U45298745</span>
-                <span className="calc-history__big num">4,377.81</span>
-              </div>
-              <div className="calc-history__col">
-                <span className="calc-history__muted">Change (All)</span>
-                <span className="calc-history__change num">
-                  3,143.56
-                  <span className="calc-history__pct">+131.1%</span>
-                </span>
-              </div>
-            </div>
-            <div className="calc-history__col calc-history__col--end">
-              <span className="calc-history__muted">Кінцева вартість</span>
-              <span className="calc-history__final num">$57 764</span>
-            </div>
+        {/* Historical chart — slides down out of the form after "Розрахувати" */}
+        {result && (
+          <div className="calc-history-wrap">
+            {/* Pointer arrow — temporarily disabled (kept here, do NOT delete; re-enable later)
+            <svg className="calc-arrow" viewBox="0 0 130 145" fill="none" aria-hidden="true">
+              <defs>
+                <mask id="calcArrowReveal" maskUnits="userSpaceOnUse" x="0" y="0" width="130" height="145">
+                  <motion.path
+                    d="M92 14 C128 52, 120 104, 36 126"
+                    stroke="#fff"
+                    strokeWidth={9}
+                    strokeLinecap="round"
+                    fill="none"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.5 }}
+                  />
+                </mask>
+              </defs>
+              <path
+                d="M92 14 C128 52, 120 104, 36 126"
+                className="calc-arrow__line"
+                mask="url(#calcArrowReveal)"
+              />
+              <motion.path
+                d="M53 132 L36 126 L48 112"
+                className="calc-arrow__head"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.28, delay: 1.25 }}
+              />
+            </svg>
+            */}
+
+            {/* Clip + downward slide: the card unfolds from the top and the content
+                slides down, so the chart reads as emerging out of the form above. */}
+            <motion.div
+              className="calc-history-reveal"
+              initial={{ height: 0 }}
+              animate={{ height: 'auto' }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <motion.div
+                initial={{ y: '-100%', opacity: 0.5 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="calc-card calc-history">
+                  <div className="calc-history__row">
+                    <div className="calc-history__figures">
+                      <div className="calc-history__col">
+                        <span className="calc-history__muted">U45298745</span>
+                        <span className="calc-history__big num">4,377.81</span>
+                      </div>
+                      <div className="calc-history__col">
+                        <span className="calc-history__muted">Change (All)</span>
+                        <span className="calc-history__change num">
+                          3,143.56
+                          <span className="calc-history__pct">+131.1%</span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="calc-history__col calc-history__col--end">
+                      <span className="calc-history__muted">Кінцева вартість</span>
+                      <span className="calc-history__final num">$57 764</span>
+                    </div>
+                  </div>
+                  <HistoryChart />
+                </div>
+              </motion.div>
+            </motion.div>
           </div>
-          <HistoryChart />
-        </Reveal>
+        )}
       </div>
     </section>
   )

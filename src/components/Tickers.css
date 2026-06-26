@@ -22,7 +22,9 @@
 }
 @keyframes tickerScroll {
   to {
-    transform: translateX(-50%);
+    /* advance exactly one of the four copies (= one set); three copies stay on
+       screen, so the row never empties at the loop seam — even on ultrawide */
+    transform: translateX(-25%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -55,7 +57,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  width: 130px;
+  width: 180px; /* wider so even "46,933.60 $ +0.63%" fits with breathing room */
 }
 .ticker__name {
   font-family: var(--font-body);

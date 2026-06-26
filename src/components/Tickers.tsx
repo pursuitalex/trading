@@ -40,8 +40,10 @@ function TickerCard({ t }: { t: Ticker }) {
 }
 
 export function Tickers() {
-  // Two identical copies so the track loops seamlessly (translateX -50% = exactly one copy).
-  const loop = [...TICKERS, ...TICKERS]
+  // Four identical copies so a full set can scroll off without ever emptying the row:
+  // the track advances exactly one copy per loop (see tickerScroll → -25%), leaving
+  // three copies on screen — seamless even on ultrawide displays.
+  const loop = [...TICKERS, ...TICKERS, ...TICKERS, ...TICKERS]
   const marquee = useMarqueeSpeed() // hover → 50% speed
   return (
     <motion.section

@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowRight, Close, Menu } from './icons'
 import logoLight from '../../assets/logo/logo-light.svg'
 
@@ -49,12 +50,12 @@ export function Navbar() {
         </nav>
 
         <div className="nav__actions">
-          <a href="#" className="btn btn--outline btn--sm">
+          <Link to="/login" className="btn btn--outline btn--sm">
             Вхід
-          </a>
-          <a href="#" className="btn btn--primary btn--sm">
+          </Link>
+          <Link to="/register" className="btn btn--primary btn--sm">
             Спробувати Trading
-          </a>
+          </Link>
         </div>
 
         <button
@@ -82,9 +83,13 @@ export function Navbar() {
                 {l.label}
               </a>
             ))}
-            <a href="#" className="btn btn--primary btn--block" onClick={() => setOpen(false)}>
+            <Link
+              to="/register"
+              className="btn btn--primary btn--block"
+              onClick={() => setOpen(false)}
+            >
               Спробувати Trading <ArrowRight size={18} />
-            </a>
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

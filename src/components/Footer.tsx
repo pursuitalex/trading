@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Reveal } from './primitives'
 import footerLogo from '../../assets/logo/footer-logo.svg'
 import './Footer.css'
@@ -44,12 +45,12 @@ export function Footer() {
                 </p>
               </div>
               <div className="footer__actions">
-                <a href="#" className="footer__btn footer__btn--outline">
+                <Link to="/login" className="footer__btn footer__btn--outline">
                   Вхід в аккаунт
-                </a>
-                <a href="#" className="footer__btn footer__btn--solid">
+                </Link>
+                <Link to="/register" className="footer__btn footer__btn--solid">
                   Спробувати Trading
-                </a>
+                </Link>
               </div>
             </div>
           </div>
