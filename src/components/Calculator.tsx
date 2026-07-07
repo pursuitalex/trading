@@ -7,13 +7,45 @@ import arrowGrowth from '../../assets/arrow-growth.svg'
 import './Calculator.css'
 
 const PRESETS = [1000, 5000, 10000, 25000, 50000]
-const RATE = 0.08
-const YEARS = 5
 
 const usd = (v: number, dec = 0) =>
   v.toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec })
 
 type Result = { total: number; profit: number; growth: number }
+
+/* Per-page configuration — the home page uses HOME_CONFIG; the Returns page
+   passes its own (45%/yr, period from the selected date range, date limits). */
+export type CalcConfig = {
+  sectionId: string
+  heading: { title: string; subtitle: string } | null
+  annualRate: number
+  /** fixed period in years; when omitted the period is derived from the dates */
+  fixedYears?: number
+  /** when true the "reinvest" toggle switches between compound and simple % */
+  reinvestAffectsCalc?: boolean
+  totalLabel: string
+  dateMin?: Date
+  dateMax?: Date
+  minPeriodMonths?: number
+  defaultStart: Date
+  defaultEnd: Date
+}
+
+const HOME_CONFIG: CalcConfig = {
+  sectionId: 'calculator',
+  heading: {
+    title: 'Розрахуйте прогнозований прибуток',
+    subtitle:
+      'На історичних минулих данних цін на акції по нашим актуальним алгоритмам. Введіть лише одну цифру, щоб побачити магію алготрейдингу',
+  },
+  annualRate: 0.08,
+  fixedYears: 5,
+  totalLabel: 'Загальна сума через 5 років',
+  defaultStart: new Date(2024, 10, 6), // 06.11.2024
+  defaultEnd: new Date(2026, 5, 4), // 04.06.2026
+}
+
+const YEAR_MS = 365.25 * 24 * 3600 * 1000
 
 /* ---- Date picker ---- */
 const MONTHS_UK = [
@@ -23,15 +55,20 @@ const MONTHS_UK = [
 const WEEKDAYS_UK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд']
 const pad = (n: number) => String(n).padStart(2, '0')
 const fmtDate = (d: Date) => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`
+const dayStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
 
 function DatePicker({
   value,
   onChange,
   ariaLabel,
+  min,
+  max,
 }: {
   value: Date
   onChange: (d: Date) => void
   ariaLabel: string
+  min?: Date
+  max?: Date
 }) {
   const [open, setOpen] = useState(false)
   const [view, setView] = useState(() => new Date(value.getFullYear(), value.getMonth(), 1))
@@ -61,8 +98,14 @@ function DatePicker({
   for (let i = 0; i < firstDow; i++) cells.push(null)
   for (let d = 1; d <= daysInMonth; d++) cells.push(d)
 
+  const minD = min ? dayStart(min) : null
+  const maxD = max ? dayStart(max) : null
   const isSel = (d: number) =>
     value.getFullYear() === year && value.getMonth() === month && value.getDate() === d
+  const isDisabled = (d: number) => {
+    const date = new Date(year, month, d)
+    return (!!minD && date < minD) || (!!maxD && date > maxD)
+  }
 
   return (
     <div className="datepicker" ref={wrapRef}>
@@ -110,6 +153,7 @@ function DatePicker({
                   key={d}
                   type="button"
                   className={`dp-day${isSel(d) ? ' selected' : ''}`}
+                  disabled={isDisabled(d)}
                   onClick={() => {
                     onChange(new Date(year, month, d))
                     setOpen(false)
@@ -200,30 +244,71 @@ function HistoryChart() {
   )
 }
 
-export function Calculator() {
+export function Calculator({ config = HOME_CONFIG }: { config?: CalcConfig }) {
   const [amount, setAmount] = useState(10000)
   const [reinvest, setReinvest] = useState(true)
   const [result, setResult] = useState<Result | null>(null)
   const [calcId, setCalcId] = useState(0)
-  const [startDate, setStartDate] = useState(() => new Date(2024, 10, 6)) // 06.11.2024
-  const [endDate, setEndDate] = useState(() => new Date(2026, 5, 4)) // 04.06.2026
+  const [error, setError] = useState<string | null>(null)
+  const [startDate, setStartDate] = useState(() => config.defaultStart)
+  const [endDate, setEndDate] = useState(() => config.defaultEnd)
 
   const calculate = () => {
-    const total = amount * Math.pow(1 + RATE, YEARS)
+    // Date-range validation (Returns page only)
+    if (config.minPeriodMonths) {
+      const s = dayStart(startDate)
+      const e = dayStart(endDate)
+      const min = config.dateMin ? dayStart(config.dateMin) : null
+      const max = config.dateMax ? dayStart(config.dateMax) : null
+      if (e <= s) {
+        setError('Дата завершення має бути пізніше за дату початку.')
+        setResult(null)
+        return
+      }
+      if (min && s < min) {
+        setError('Початок періоду — не раніше 01.01.2020.')
+        setResult(null)
+        return
+      }
+      if (max && e > max) {
+        setError('Завершення періоду — не пізніше за вчорашню дату.')
+        setResult(null)
+        return
+      }
+      const months =
+        (e.getFullYear() - s.getFullYear()) * 12 +
+        (e.getMonth() - s.getMonth()) -
+        (e.getDate() < s.getDate() ? 1 : 0)
+      if (months < config.minPeriodMonths) {
+        setError('Мінімальний період — 1 рік. Оберіть ширший діапазон дат.')
+        setResult(null)
+        return
+      }
+    }
+
+    setError(null)
+    const years =
+      config.fixedYears ?? (dayStart(endDate).getTime() - dayStart(startDate).getTime()) / YEAR_MS
+    const compound = config.reinvestAffectsCalc ? reinvest : true
+    const total = compound
+      ? amount * Math.pow(1 + config.annualRate, years)
+      : amount * (1 + config.annualRate * years)
     setResult({ total, profit: total - amount, growth: (total / amount - 1) * 100 })
     setCalcId((n) => n + 1)
   }
 
+  const ratePct = Math.round(config.annualRate * 100)
+  const typeLabel = config.reinvestAffectsCalc ? (reinvest ? 'Складний %' : 'Простий %') : 'Складний %'
+
   return (
-    <section className="section calc" id="calculator">
+    <section className="section calc" id={config.sectionId}>
       <div className="container">
-        <Reveal className="calc__head" variant="fadeBlur">
-          <h2 className="calc__title">Розрахуйте прогнозований прибуток</h2>
-          <p className="calc__subtitle">
-            На історичних минулих данних цін на акції по нашим актуальним алгоритмам. Введіть лише
-            одну цифру, щоб побачити магію алготрейдингу
-          </p>
-        </Reveal>
+        {config.heading && (
+          <Reveal className="calc__head" variant="fadeBlur">
+            <h2 className="calc__title">{config.heading.title}</h2>
+            <p className="calc__subtitle">{config.heading.subtitle}</p>
+          </Reveal>
+        )}
 
         <div className="calc__grid">
           {/* Params card */}
@@ -243,11 +328,23 @@ export function Calculator() {
               <div className="calc-dates">
                 <div className="calc-field">
                   <span className="calc-label">Дата початку торгів</span>
-                  <DatePicker value={startDate} onChange={setStartDate} ariaLabel="Дата початку торгів" />
+                  <DatePicker
+                    value={startDate}
+                    onChange={setStartDate}
+                    ariaLabel="Дата початку торгів"
+                    min={config.dateMin}
+                    max={config.dateMax}
+                  />
                 </div>
                 <div className="calc-field">
                   <span className="calc-label">Дата завершення торгів</span>
-                  <DatePicker value={endDate} onChange={setEndDate} ariaLabel="Дата завершення торгів" />
+                  <DatePicker
+                    value={endDate}
+                    onChange={setEndDate}
+                    ariaLabel="Дата завершення торгів"
+                    min={config.dateMin}
+                    max={config.dateMax}
+                  />
                 </div>
               </div>
 
@@ -284,6 +381,12 @@ export function Calculator() {
                 <span className="calc-check__hint">— прибуток автоматично реінвестується в стратегію</span>
               </button>
 
+              {error && (
+                <p className="calc-error" role="alert">
+                  {error}
+                </p>
+              )}
+
               <button type="button" className="calc-submit" onClick={calculate}>
                 Розрахувати по історичним даним
               </button>
@@ -307,7 +410,7 @@ export function Calculator() {
 
             <div className="calc-result__body">
               <div className="calc-result__total">
-                <span className="calc-result__muted">Загальна сума через 5 років</span>
+                <span className="calc-result__muted">{config.totalLabel}</span>
                 <strong className="num">
                   {result ? (
                     <>
@@ -360,11 +463,11 @@ export function Calculator() {
                 </div>
                 <div>
                   <span className="calc-result__muted">Ставка</span>
-                  <span className="num">8% / рік</span>
+                  <span className="num">{ratePct}% / рік</span>
                 </div>
                 <div>
                   <span className="calc-result__muted">Тип</span>
-                  <span>Складний %</span>
+                  <span>{typeLabel}</span>
                 </div>
               </div>
 

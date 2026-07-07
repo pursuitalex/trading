@@ -29,4 +29,6 @@ dist-ssr
 .agents/
 .claude/
 .design-ref/
+.design-sync/
+.ds-sync/
 figma/

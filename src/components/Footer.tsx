@@ -36,12 +36,11 @@ export function Footer() {
               <div className="footer__disc-head">
                 <h3 className="footer__disc-title">Попередження про ризики</h3>
                 <p className="footer__disc-text">
-                  Торгівля на фондовому ринку пов&apos;язана з високим рівнем ризику. Минулі
-                  результати алгоритму не є гарантією майбутніх прибутків. Доходність 40-80% є
+                  Торгівля на фондовому ринку пов&apos;язана з певним рівнем ризику. Минулі
+                  результати алгоритму не є 100%-ою гарантією майбутніх прибутків. Дохідність 45+% є
                   цільовим показником стратегії, проте фактичний результат залежить від ринкової
                   кон&apos;юнктури. Interactive Brokers LLC є незалежним брокером і не несе
-                  відповідальності за роботу нашого алгоритму. Інвестуйте лише ті кошти, втрату яких
-                  ви можете собі дозволити.
+                  відповідальності за роботу нашого алгоритму
                 </p>
               </div>
               <div className="footer__actions">
@@ -57,7 +56,7 @@ export function Footer() {
 
           {/* bottom bar */}
           <div className="footer__bottom">
-            <span className="footer__copy">© 2026 AlgoTrade. Всі права захищені.</span>
+            <span className="footer__copy">© 2026 Trading.com.ua. Всі права захищені</span>
             <div className="footer__legal">
               {LEGAL.map((l) => (
                 <a key={l} href="#" className="footer__legal-link">

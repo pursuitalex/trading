@@ -231,6 +231,47 @@ export const HelpCircle = (p: IconProps) => (
   </Svg>
 )
 
+export const Photo = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="2.5" />
+    <circle cx="9" cy="9" r="2" />
+    <path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21" />
+  </Svg>
+)
+
+export const Phone = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.09 4.18 2 2 0 0 1 4.07 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z" />
+  </Svg>
+)
+
+export const Mail = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+    <path d="m3 7 9 6 9-6" />
+  </Svg>
+)
+
+export const MapPin = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M20 10.5c0 5.8-8 11-8 11s-8-5.2-8-11a8 8 0 0 1 16 0Z" />
+    <circle cx="12" cy="10.5" r="3" />
+  </Svg>
+)
+
+export const Paperclip = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.2-9.19a4 4 0 0 1 5.65 5.66l-9.19 9.19a2 2 0 0 1-2.83-2.83l8.49-8.49" />
+  </Svg>
+)
+
+export const Send = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M22 2 11 13" />
+    <path d="M22 2 15 22l-4-9-9-4 20-7Z" />
+  </Svg>
+)
+
 export const User = (p: IconProps) => (
   <Svg {...p}>
     <circle cx="12" cy="8" r="4" />

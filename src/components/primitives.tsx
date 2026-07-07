@@ -3,6 +3,37 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { fadeUp, hoverLift, revealVariants, type RevealVariant, viewportOnce } from '../lib/motion'
 import { Star } from './icons'
 
+/* ---------- SectionHead: big outlined number + gradient title ----------
+   Shared "chapter heading" for numbered sections on inner pages (Дохідність,
+   Гарантії, ...) — one implementation so the rhythm stays identical
+   everywhere instead of drifting per-page copies. */
+export function SectionHead({
+  num,
+  title,
+  sub,
+  light = false,
+}: {
+  num: string
+  title: string
+  sub?: string
+  light?: boolean
+}) {
+  return (
+    <Reveal className="section-head" variant="fadeUp">
+      <span
+        className={`section-head__num${light ? ' section-head__num--light' : ''}`}
+        aria-hidden="true"
+      >
+        {num}
+      </span>
+      <div className="section-head__copy">
+        <h2 className="section-head__title">{title}</h2>
+        {sub && <p className="section-head__sub">{sub}</p>}
+      </div>
+    </Reveal>
+  )
+}
+
 /* ---------- Reveal: scroll-triggered fade-up wrapper ---------- */
 export function Reveal({
   children,

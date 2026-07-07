@@ -3,50 +3,82 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Close, Menu } from './icons'
 import logoLight from '../../assets/logo/logo-light.svg'
+import logoDark from '../../assets/logo/logo-dark.svg'
 
-const LINKS = [
-  { label: 'Головна', href: '#top' },
-  { label: 'Доходність', href: '#returns' },
-  { label: 'Гарантії', href: '#guarantees' },
-  { label: 'Ціни', href: '#pricing' },
-  { label: 'Контакти', href: '#contacts' },
+const LINKS: { label: string; to?: string; href?: string }[] = [
+  { label: 'Дохідність', to: '/returns' },
+  { label: 'Гарантії', to: '/guarantees' },
+  { label: 'Переваги', to: '/advantages' },
+  { label: 'Ціни', to: '/pricing' },
+  { label: 'Як почати', to: '/how-to-start' },
+  { label: 'Контакти', to: '/contacts' },
 ]
 
-export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
+export function Navbar({ onLight = false }: { onLight?: boolean }) {
+  // Past the first screen the bar morphs into a floating white pill
+  // (Figma node 6575:7396). Trigger ~one-third down the first viewport so
+  // the change kicks in early as the reader starts leaving the first screen.
+  const [floating, setFloating] = useState(false)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => setFloating(window.scrollY > window.innerHeight * 0.33)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   return (
     <motion.header
-      className="nav"
-      data-scrolled={scrolled}
+      className={`nav${onLight ? ' nav--on-light' : ''}`}
+      data-floating={floating}
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="container nav__inner">
-        <a href="#top" className="nav__brand" aria-label="Trading.com.ua — на головну">
-          <img src={logoLight} alt="Trading.com.ua" className="nav__logo" width={147} height={36} />
+        <Link to="/" className="nav__brand" aria-label="Trading.com.ua — на головну">
+          {/* Both marks stacked; CSS crossfades light↔dark by state. */}
+          <span className="nav__logo">
+            <img
+              src={logoLight}
+              alt="Trading.com.ua"
+              className="nav__logo-img"
+              width={147}
+              height={36}
+            />
+            <img
+              src={logoDark}
+              alt=""
+              aria-hidden="true"
+              className="nav__logo-img nav__logo-img--dark"
+              width={147}
+              height={36}
+            />
+          </span>
           <span className="nav__tagline">
             №1 автоматична торгівля
             <br />
             акціями по алгоритмам
           </span>
-        </a>
+        </Link>
 
         <nav className="nav__links" aria-label="Основна навігація">
-          {LINKS.map((l) => (
-            <a key={l.href} href={l.href}>
-              {l.label}
-            </a>
-          ))}
+          {LINKS.map((l) =>
+            l.to ? (
+              <Link key={l.label} to={l.to}>
+                {l.label}
+              </Link>
+            ) : (
+              <a key={l.label} href={l.href}>
+                {l.label}
+              </a>
+            ),
+          )}
         </nav>
 
         <div className="nav__actions">
@@ -78,11 +110,17 @@ export function Navbar() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
           >
-            {LINKS.map((l) => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)}>
-                {l.label}
-              </a>
-            ))}
+            {LINKS.map((l) =>
+              l.to ? (
+                <Link key={l.label} to={l.to} onClick={() => setOpen(false)}>
+                  {l.label}
+                </Link>
+              ) : (
+                <a key={l.label} href={l.href} onClick={() => setOpen(false)}>
+                  {l.label}
+                </a>
+              ),
+            )}
             <Link
               to="/register"
               className="btn btn--primary btn--block"
