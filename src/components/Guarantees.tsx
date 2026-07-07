@@ -7,13 +7,11 @@ import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut } from '../lib/motion'
 import {
   ArrowRight,
-  ArrowUpRight,
   Calendar,
   Check,
   ChevronDown,
   Globe,
   Info,
-  Landmark,
   Layers,
   Lock,
   Repeat,
@@ -23,6 +21,9 @@ import {
   User,
 } from './icons'
 import smallSign from '../../assets/logo/small-sign.svg'
+import ibDesktop from '../../assets/guarantees/ib-desktop.webp'
+import ibTablet from '../../assets/guarantees/ib-tablet.webp'
+import ibMobile from '../../assets/guarantees/ib-mobile.webp'
 import './Guarantees.css'
 
 /* ---------- Data ---------- */
@@ -321,42 +322,35 @@ export function Guarantees() {
         <section className="section" id="grt-01">
           <div className="container">
             <SectionHead num="01" title="Активи на вашому рахунку в Interactive Brokers" />
-            <Reveal className="grt-card" variant="fadeUp">
-              <div className="grt-card__top">
-                <span className="grt-icon">
-                  <Landmark size={26} />
-                </span>
-                <h3 className="grt-card__title">
+            <Reveal className="grt-ib" variant="fadeUp">
+              <picture className="grt-ib__bg">
+                <source srcSet={ibMobile} media="(max-width: 560px)" />
+                <source srcSet={ibTablet} media="(max-width: 900px)" />
+                <img src={ibDesktop} alt="" aria-hidden="true" />
+              </picture>
+              <div className="grt-ib__copy">
+                <h3 className="grt-ib__title">
                   Усі ваші акції та кошти зберігаються на вашому особистому рахунку
                 </h3>
-              </div>
-              <p className="grt-card__text">
-                Interactive Brokers (IB) — один із найбільших і найнадійніших брокерів світу. Ми не
-                зберігаємо ваші кошти й не маємо до них прямого доступу.
-              </p>
-              <div className="grt-stats">
-                <div className="grt-stat">
-                  <strong className="num">
-                    <CountUp to={4.85} decimals={2} duration={1.6} /> млн
-                  </strong>
-                  <span>активних клієнтських рахунків</span>
+                <p className="grt-ib__text">
+                  Interactive Brokers (IB) — один із найбільших і найнадійніших брокерів світу. Ми не
+                  зберігаємо ваші кошти й не маємо до них прямого доступу.
+                </p>
+                <div className="grt-ib__tickers">
+                  <div className="grt-ib__ticker">
+                    <span className="grt-ib__ticker-label">Активних клієнтських рахунків</span>
+                    <strong className="grt-ib__ticker-val grt-ib__ticker-val--red num">
+                      <CountUp to={4.85} decimals={2} duration={1.6} /> млн
+                    </strong>
+                  </div>
+                  <div className="grt-ib__ticker">
+                    <span className="grt-ib__ticker-label">Активів клієнтів на зберіганні</span>
+                    <strong className="grt-ib__ticker-val grt-ib__ticker-val--green num">
+                      $<CountUp to={870} duration={1.6} delay={0.1} /> млрд
+                    </strong>
+                  </div>
                 </div>
-                <div className="grt-stat">
-                  <strong className="num">
-                    $<CountUp to={870} duration={1.6} delay={0.1} /> млрд
-                  </strong>
-                  <span>активів клієнтів на зберіганні</span>
-                </div>
               </div>
-              <a
-                className="grt-source"
-                href="https://uk.wikipedia.org/wiki/Interactive_Brokers"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Джерело: Wikipedia
-                <ArrowUpRight size={14} />
-              </a>
             </Reveal>
           </div>
         </section>
