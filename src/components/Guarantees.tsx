@@ -4,7 +4,7 @@ import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
-import { easeOut } from '../lib/motion'
+import { easeOut, viewportOnce } from '../lib/motion'
 import {
   ArrowRight,
   Calendar,
@@ -16,7 +16,6 @@ import {
   Lock,
   Repeat,
   ShieldCheck,
-  Star,
   TrendingUp,
   User,
 } from './icons'
@@ -24,6 +23,9 @@ import smallSign from '../../assets/logo/small-sign.svg'
 import ibDesktop from '../../assets/guarantees/ib-desktop.webp'
 import ibTablet from '../../assets/guarantees/ib-tablet.webp'
 import ibMobile from '../../assets/guarantees/ib-mobile.webp'
+import incentiveHandshake from '../../assets/guarantees/incentive-handshake.webp'
+import handshakeTablet from '../../assets/guarantees/handshake-tablet.webp'
+import handshakeMobile from '../../assets/guarantees/handshake-mobile.webp'
 import './Guarantees.css'
 
 /* ---------- Data ---------- */
@@ -406,45 +408,55 @@ export function Guarantees() {
         {/* ============ 04 · Loss protection (featured, navy) ============ */}
         <section className="section">
           <div className="container">
-            <Reveal className="feature-card" variant="fadeUp">
+            <Reveal className="feature-card grt-guarantee" variant="fadeUp">
               <span className="feature-card__grid" aria-hidden="true" />
-              <div className="feature-card__head">
-                <span className="feature-card__badge">
-                  <Star size={13} />
-                  Головна гарантія
-                </span>
-                <span className="section-head__num section-head__num--light" aria-hidden="true">
-                  04
-                </span>
-              </div>
-              <h2 className="feature-card__title">Гарантія захисту особисто вкладених коштів</h2>
-              <div className="grt-credit__grid2">
-                <div className="grt-credit__copy">
-                  <p>
+              <span className="grt-guarantee__glow" aria-hidden="true" />
+              <div className="grt-guarantee__grid2">
+                <div className="grt-guarantee__copy">
+                  <div className="grt-guarantee__head">
+                    <span
+                      className="section-head__num section-head__num--light"
+                      aria-hidden="true"
+                    >
+                      04
+                    </span>
+                    <h2 className="feature-card__title grt-guarantee__title">
+                      Гарантія захисту особисто вкладених коштів
+                    </h2>
+                  </div>
+                  <p className="grt-guarantee__lead">
                     У найгіршому випадку ми компенсуємо різницю, щоб сума на вашому рахунку ніколи не
                     була меншою за всі ваші особисті вкладення за весь період.
                   </p>
-                  <p className="grt-credit__how">
+                  <p className="grt-guarantee__note">
+                    <span className="grt-guarantee__note-k">Як це працює</span>
                     Від загальної суми на рахунку віднімається весь зароблений нами для вас прибуток.
                     Якщо результат виявиться меншим за ваші вкладення — ми компенсуємо нестачу.
                   </p>
                 </div>
-                <div className="grt-feature__details">
-                  {FEATURE_DETAILS.map((d) => {
+                <ul className="grt-terms">
+                  {FEATURE_DETAILS.map((d, i) => {
                     const Icon = d.icon
                     return (
-                      <div className="grt-detail" key={d.title}>
-                        <span className="grt-detail__icon">
-                          <Icon size={16} />
+                      <motion.li
+                        className="grt-term"
+                        key={d.title}
+                        initial={{ opacity: 0, y: 14 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={viewportOnce}
+                        transition={{ delay: 0.06 * i, duration: 0.5, ease: easeOut }}
+                      >
+                        <span className="grt-term__marker" aria-hidden="true">
+                          <Icon size={17} />
                         </span>
-                        <div>
-                          <h4>{d.title}</h4>
-                          <p>{d.text}</p>
+                        <div className="grt-term__body">
+                          <h4 className="grt-term__title">{d.title}</h4>
+                          <p className="grt-term__text">{d.text}</p>
                         </div>
-                      </div>
+                      </motion.li>
                     )
                   })}
-                </div>
+                </ul>
               </div>
             </Reveal>
           </div>
@@ -454,34 +466,67 @@ export function Guarantees() {
         <section className="section">
           <div className="container">
             <SectionHead num="05" title="Наші інтереси збігаються з вашими" />
-            <Reveal className="grt-card grt-card--incentive" variant="fadeUp">
-              <span className="grt-icon">
-                <TrendingUp size={26} />
-              </span>
-              <p className="grt-card__text">
-                Ми отримуємо комісію лише від вашого прибутку. Тому ми максимально зацікавлені
-                збільшувати його — це однаково вигідно і вам, і нам.
-              </p>
-              <span className="grt-pill">Комісія лише від прибутку</span>
+            <Reveal className="grt-inc" variant="fadeUp">
+              <picture className="grt-inc__bg">
+                <source srcSet={handshakeMobile} media="(max-width: 560px)" />
+                <source srcSet={handshakeTablet} media="(max-width: 900px)" />
+                <img
+                  src={incentiveHandshake}
+                  alt="Рукостискання та висхідний графік — символ взаємовигідної співпраці"
+                />
+              </picture>
+              <div className="grt-inc__scrim" aria-hidden="true" />
+              <div className="grt-inc__copy">
+                <span className="grt-inc__pill">
+                  <i aria-hidden="true" />
+                  Комісія лише від прибутку
+                </span>
+                <p className="grt-inc__text">
+                  Ми отримуємо комісію лише від вашого прибутку. Тому ми максимально
+                  зацікавлені збільшувати його — <b>це однаково вигідно і вам, і нам.</b>
+                </p>
+                <div className="grt-inc__winwin">
+                  <div className="grt-inc__ww">
+                    <span className="grt-inc__ww-ic">
+                      <TrendingUp size={18} />
+                    </span>
+                    <div className="grt-inc__ww-tx">
+                      <span>Вам</span>
+                      <strong>більший прибуток</strong>
+                    </div>
+                  </div>
+                  <div className="grt-inc__ww">
+                    <span className="grt-inc__ww-ic">
+                      <TrendingUp size={18} />
+                    </span>
+                    <div className="grt-inc__ww-tx">
+                      <span>Нам</span>
+                      <strong>частка від зростання</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Reveal>
           </div>
         </section>
 
         {/* ============ CTA ============ */}
         <section className="section">
-          <div className="container grt-cta">
-            <h2 className="grt-cta__title">Готові почати з упевненістю?</h2>
-            <p className="grt-cta__text">
-              Подивіться історичну дохідність стратегії або одразу створіть акаунт.
-            </p>
-            <div className="grt-cta__btns">
-              <Link to="/returns" className="grt-cta__btn grt-cta__btn--outline">
-                Дивитись дохідність
-              </Link>
-              <Link to="/register" className="grt-cta__btn grt-cta__btn--solid">
-                Створити акаунт
-                <ArrowRight size={18} />
-              </Link>
+          <div className="container">
+            <div className="grt-cta">
+              <h2 className="grt-cta__title">Готові почати з упевненістю?</h2>
+              <p className="grt-cta__text">
+                Подивіться історичну дохідність стратегії або одразу створіть акаунт.
+              </p>
+              <div className="grt-cta__btns">
+                <Link to="/returns" className="grt-cta__btn grt-cta__btn--outline">
+                  Дивитись дохідність
+                </Link>
+                <Link to="/register" className="grt-cta__btn grt-cta__btn--solid">
+                  Створити акаунт
+                  <ArrowRight size={18} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

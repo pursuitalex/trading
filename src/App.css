@@ -115,31 +115,200 @@ main {
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
-.nav__mobile {
-  position: absolute;
-  top: calc(var(--nav-h) - 8px);
-  left: clamp(1rem, 4vw, 2rem);
-  right: clamp(1rem, 4vw, 2rem);
+/* ---- Full-screen mobile/tablet menu (Figma 6677:6878) ----
+   Replaces the old dropdown pill: a white overlay with a logo + close, six
+   numbered nav items, two CTAs and an IBKR tagline. Rendered whenever the
+   horizontal nav can't fit (<=900px). Portaled to <body> in Navbar.tsx so it
+   escapes the header's transform and covers the viewport. Tablet reuses the
+   exact layout, proportionally enlarged (media block below). */
+.navmenu {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  background: #fff;
+  padding: 24px 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.navmenu__inner {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  padding: 1rem;
-  background: rgba(15, 21, 60, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  gap: 24px;
+  width: 100%;
+  max-width: 640px;
+  min-height: 100%;
+  margin-inline: auto;
 }
-.nav__mobile a:not(.btn) {
-  padding: 0.7rem 0.6rem;
-  color: #fcfcfc;
-  border-radius: 8px;
+.navmenu__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.nav__mobile a:not(.btn):hover {
-  background: rgba(255, 255, 255, 0.08);
+.navmenu__logo img {
+  display: block;
+  height: 32px;
+  width: auto;
 }
-.nav__mobile .btn {
-  margin-top: 0.4rem;
+.navmenu__close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: -6px;
+  border-radius: 10px;
+  color: #1a1e35;
+  transition: background 0.18s ease;
+}
+.navmenu__close:hover {
+  background: rgba(15, 21, 60, 0.06);
+}
+.navmenu__divider {
+  height: 1px;
+  background: #e8e9eb;
+}
+.navmenu__list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 32px;
+  padding: 12px 0;
+}
+.navmenu__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.navmenu__num {
+  flex: none;
+  width: 24px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  color: var(--brand-btn);
+}
+.navmenu__label {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: -0.02em;
+  color: #1a1e35;
+  transition: color 0.18s ease;
+}
+.navmenu__arrow {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin-top: 1px;
+  color: #9aa0b4;
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+.navmenu__item:hover .navmenu__label {
+  color: var(--brand-btn);
+}
+.navmenu__item:hover .navmenu__arrow {
+  color: var(--brand-btn);
+  transform: translate(2px, -2px);
+}
+.navmenu__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.navmenu__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 16px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+.navmenu__btn--outline {
+  border: 1px solid #686a7b;
+  color: #1d213a;
+}
+.navmenu__btn--outline:hover {
+  border-color: #1d213a;
+  background: #f4f6fb;
+}
+.navmenu__btn--solid {
+  background: var(--brand-btn);
+  color: #fff;
+}
+.navmenu__btn--solid:hover {
+  background: var(--brand-btn-hover);
+}
+.navmenu__note {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+  color: #686a7b;
+}
+@media (prefers-reduced-motion: reduce) {
+  .navmenu__item:hover .navmenu__arrow {
+    transform: none;
+  }
+}
+/* Tablet (561–900px): identical menu, proportionally larger */
+@media (min-width: 561px) and (max-width: 900px) {
+  .navmenu {
+    padding: 40px 32px;
+  }
+  .navmenu__inner {
+    gap: 32px;
+    /* Compact centred column — keeps items from stretching wide on tablet
+       (label→arrow gap stays close to the mobile proportion). */
+    max-width: 380px;
+  }
+  .navmenu__logo img {
+    height: 38px;
+  }
+  .navmenu__close {
+    width: 48px;
+    height: 48px;
+  }
+  .navmenu__list {
+    gap: 40px;
+    padding: 20px 0;
+  }
+  .navmenu__num {
+    width: 30px;
+    font-size: 14px;
+  }
+  .navmenu__label {
+    font-size: 32px;
+    line-height: 38px;
+  }
+  .navmenu__arrow {
+    width: 34px;
+    height: 34px;
+  }
+  .navmenu__buttons {
+    gap: 18px;
+  }
+  .navmenu__btn {
+    height: 60px;
+    border-radius: 14px;
+    font-size: 18px;
+  }
+  .navmenu__note {
+    font-size: 15px;
+  }
 }
 
 /* ---- Dark header for light-background pages (e.g. /returns) ---- */
@@ -191,19 +360,6 @@ main {
 .nav[data-floating='true'] .btn--outline:hover {
   border-color: #1d213a;
   background: #f4f6fb;
-}
-.nav[data-floating='true'] .nav__mobile {
-  top: calc(var(--nav-h) + 14px);
-}
-.nav--on-light .nav__mobile {
-  background: rgba(255, 255, 255, 0.97);
-  border-color: rgba(15, 21, 60, 0.1);
-}
-.nav--on-light .nav__mobile a:not(.btn) {
-  color: #1d213a;
-}
-.nav--on-light .nav__mobile a:not(.btn):hover {
-  background: rgba(15, 21, 60, 0.06);
 }
 .nav--on-light .btn--outline {
   color: #1d213a;

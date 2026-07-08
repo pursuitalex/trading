@@ -173,6 +173,13 @@ export const Menu = (p: IconProps) => (
   </Svg>
 )
 
+/* Two-line burger — matches the mobile header in Figma (burger-menu/03). */
+export const Burger = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 9h16M4 15h16" />
+  </Svg>
+)
+
 export const Close = (p: IconProps) => (
   <Svg {...p}>
     <path d="M6 6l12 12M18 6 6 18" />

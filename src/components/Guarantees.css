@@ -387,7 +387,7 @@
   justify-content: center;
   align-items: flex-start;
   gap: clamp(10px, 1.6cqw, 22px);
-  padding: 5% clamp(16px, 3cqw, 40px) 5% clamp(22px, 8cqw, 116px);
+  padding: 6% clamp(16px, 3cqw, 40px) 6% clamp(22px, 6cqw, 72px);
 }
 .grt-ib__title {
   font-family: var(--font-display);
@@ -661,87 +661,314 @@
 .grt .feature-card__badge svg {
   color: #ffd873;
 }
-.grt-credit__grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: clamp(20px, 3.5vw, 40px);
-  margin-top: 22px;
-  align-items: center;
+/* ---- 04 · Головна гарантія — flagship trust card ----
+   Soft top-right light source + an editorial hairline term list (no nested
+   cards); scoped to this card via .grt-guarantee, shared shell untouched. */
+.grt-guarantee__glow {
+  position: absolute;
+  z-index: -1;
+  top: -32%;
+  right: -6%;
+  width: 52%;
+  height: 118%;
+  background: radial-gradient(closest-side, rgba(96, 132, 255, 0.33), transparent 72%);
+  filter: blur(22px);
+  pointer-events: none;
 }
-.grt-credit__copy p {
-  font-family: var(--font-body);
-  font-size: 1.0313rem;
-  line-height: 1.62;
-  color: rgba(255, 255, 255, 0.85);
-}
-.grt-credit__how {
-  margin-top: 14px;
-  color: rgba(255, 255, 255, 0.72) !important;
-  font-size: 0.975rem !important;
-}
-.grt-feature__details {
+.grt-guarantee__grid2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: clamp(26px, 4vw, 56px);
+  align-items: start;
 }
-.grt-detail {
+/* Section-head style heading in the left column: the outlined 04 sits to the
+   left of the title; the title matches the standard section-heading size. */
+.grt-guarantee__head {
   display: flex;
-  gap: 12px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  gap: clamp(12px, 2vw, 24px);
+  margin-bottom: clamp(16px, 2vw, 22px);
 }
-.grt-detail__icon {
+.grt-guarantee__head .grt-guarantee__title {
+  margin: 0;
+  min-width: 0;
+  font-size: clamp(1.6rem, 2.7vw, 2.35rem);
+  line-height: 1.18;
+}
+@media (max-width: 720px) {
+  .grt-guarantee__head {
+    align-items: flex-start;
+  }
+}
+.grt-guarantee__lead {
+  font-family: var(--font-body);
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-weight: 450;
+  line-height: 1.5;
+  color: #fff;
+  text-wrap: balance;
+}
+.grt-guarantee__note {
+  margin-top: clamp(18px, 2.4vw, 26px);
+  padding-top: clamp(16px, 2vw, 20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.64);
+}
+.grt-guarantee__note-k {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #9ab6ff;
+}
+.grt-terms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.grt-term {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: start;
+  padding: clamp(15px, 1.9vw, 20px) 14px;
+  border-radius: 12px;
+  transition: background 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.grt-term + .grt-term {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.grt-term:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.grt-term__marker {
   flex: none;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: #cfe0ff;
+  transition:
+    border-color 240ms ease,
+    background 240ms ease,
+    color 240ms ease,
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.grt-detail h4 {
+.grt-term:hover .grt-term__marker {
+  border-color: rgba(122, 150, 255, 0.75);
+  background: rgba(122, 150, 255, 0.16);
+  color: #e6edff;
+  transform: scale(1.07);
+}
+.grt-term__title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.975rem;
+  font-size: 1.0313rem;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
   color: #fff;
 }
-.grt-detail p {
-  margin-top: 4px;
+.grt-term__text {
+  margin-top: 5px;
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 48ch;
+}
+@media (prefers-reduced-motion: reduce) {
+  .grt-term,
+  .grt-term__marker {
+    transition: none;
+  }
 }
 
-/* ---- 05: aligned incentives — horizontal variant (originality: not
-   another vertical icon-over-text card, a single confident banner row) ---- */
-.grt-card--incentive {
+/* ---- 05: aligned incentives — illustrated banner (mirrors the .grt-ib
+   pattern: full-bleed 3D render as background + copy overlaid in the empty
+   area, container-query sized). The illustration shows the *concept* of the
+   copy — a handshake growing into an upward chart = mutually-beneficial
+   cooperation. See docs/banners.md for the banner recipe + prompt. ---- */
+.grt-inc {
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: clamp(20px, 3vw, 40px);
+  background: #0b1030;
+  color: #fff;
+  box-shadow: 0 30px 60px -30px rgba(4, 10, 35, 0.7);
+}
+.grt-inc__bg {
+  display: block;
+}
+.grt-inc__bg img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.grt-inc__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    #0b1030 38%,
+    rgba(11, 16, 48, 0.86) 54%,
+    rgba(11, 16, 48, 0) 73%
+  );
+}
+.grt-inc__copy {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 2;
+  width: 55%;
   display: flex;
-  align-items: center;
-  gap: 22px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(16px, 2cqw, 26px);
+  padding: 6% clamp(16px, 3cqw, 40px) 6% clamp(22px, 6cqw, 72px);
 }
-.grt-card--incentive .grt-card__text {
-  flex: 1;
-  min-width: 240px;
-}
-.grt-pill {
-  flex: none;
+.grt-inc__pill {
   display: inline-flex;
   align-items: center;
-  height: 38px;
-  padding: 0 18px;
+  gap: 9px;
+  height: 36px;
+  padding: 0 16px;
   border-radius: 19px;
-  background: rgba(0, 188, 125, 0.12);
-  border: 1px solid rgba(0, 163, 92, 0.25);
+  background: rgba(0, 188, 125, 0.16);
+  border: 1px solid rgba(110, 242, 176, 0.32);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.9rem;
-  color: #047857;
+  font-size: clamp(0.74rem, 1.05cqw, 0.94rem);
+  color: #8ff7c6;
   white-space: nowrap;
+}
+.grt-inc__pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #6ef2b0;
+  box-shadow: 0 0 0 3px rgba(110, 242, 176, 0.2);
+}
+.grt-inc__text {
+  max-width: 40ch;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(1.06rem, 1.78cqw, 1.58rem);
+  line-height: 1.5;
+  color: #eef2ff;
+}
+.grt-inc__text b {
+  color: #fff;
+  font-weight: 600;
+}
+.grt-inc__winwin {
+  display: flex;
+  gap: clamp(10px, 1.4cqw, 18px);
+  margin-top: clamp(4px, 0.6cqw, 10px);
+  flex-wrap: wrap;
+}
+.grt-inc__ww {
+  display: flex;
+  align-items: center;
+  gap: clamp(9px, 1.1cqw, 13px);
+  padding: clamp(11px, 1.3cqw, 15px) clamp(15px, 1.7cqw, 21px);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+}
+.grt-inc__ww-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: clamp(30px, 3.3cqw, 40px);
+  height: clamp(30px, 3.3cqw, 40px);
+  border-radius: 11px;
+  background: rgba(0, 188, 125, 0.16);
+  border: 1px solid rgba(110, 242, 176, 0.3);
+  color: #6ef2b0;
+}
+.grt-inc__ww-tx {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.grt-inc__ww-tx span {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.62rem, 0.84cqw, 0.78rem);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9fb2e6;
+}
+.grt-inc__ww-tx strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(0.96rem, 1.4cqw, 1.22rem);
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+/* Phone (source swaps to the portrait render at 560px): the render becomes a
+   bottom-anchored background and the copy flows normally, so the card grows
+   vertically with the amount of content. A top→transparent gradient — colour
+   sampled from the render's top (#1c2e4e) — keeps the copy legible and blends
+   seamlessly into the image below. */
+@media (max-width: 560px) {
+  .grt-inc__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .grt-inc__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
+  .grt-inc__scrim {
+    display: none;
+  }
+  .grt-inc__copy {
+    position: relative;
+    inset: auto;
+    z-index: 2;
+    width: auto;
+    justify-content: flex-start;
+    gap: clamp(12px, 3cqw, 20px);
+    /* Tall bottom pad reserves a clean zone for the handshake so the copy
+       never sits on the lower (clasp) part of the render. */
+    padding: clamp(22px, 6cqw, 42px) clamp(20px, 5.5cqw, 40px) clamp(240px, 66cqw, 330px);
+    /* Solid over the whole copy, then a dense mid-band over the image, fading
+       to transparent only near the bottom where the clean handshake shows. */
+    background: linear-gradient(
+      180deg,
+      #1c2e4e 0%,
+      #1c2e4e 54%,
+      rgba(28, 46, 78, 0.9) 66%,
+      rgba(28, 46, 78, 0.4) 84%,
+      rgba(28, 46, 78, 0) 100%
+    );
+  }
+  .grt-inc__text {
+    max-width: none;
+    font-size: clamp(1rem, 4.4cqw, 1.3rem);
+  }
+  .grt-inc__winwin {
+    width: 100%;
+    gap: clamp(8px, 2cqw, 12px);
+  }
+  .grt-inc__ww {
+    width: 100%;
+  }
 }
 
 /* ---- CTA ---- */
@@ -826,10 +1053,7 @@
   .grt-verify-a {
     grid-template-columns: 1fr;
   }
-  .grt-credit__grid2 {
-    grid-template-columns: 1fr;
-  }
-  .grt-feature__details {
+  .grt-guarantee__grid2 {
     grid-template-columns: 1fr;
   }
 }

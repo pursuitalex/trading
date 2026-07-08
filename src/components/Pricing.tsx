@@ -392,20 +392,22 @@ export function Pricing() {
 
         {/* ============ CTA ============ */}
         <section className="section">
-          <div className="container pr-cta">
-            <h2 className="pr-cta__title">Порахуйте свій прибуток</h2>
-            <p className="pr-cta__text">
-              Подивіться історичну дохідність стратегії на обраному періоді або одразу створіть
-              акаунт.
-            </p>
-            <div className="pr-cta__btns">
-              <Link to="/returns" className="pr-cta__btn pr-cta__btn--outline">
-                Дивитись дохідність
-              </Link>
-              <Link to="/register" className="pr-cta__btn pr-cta__btn--solid">
-                Створити акаунт
-                <ArrowRight size={18} />
-              </Link>
+          <div className="container">
+            <div className="pr-cta">
+              <h2 className="pr-cta__title">Порахуйте свій прибуток</h2>
+              <p className="pr-cta__text">
+                Подивіться історичну дохідність стратегії на обраному періоді або одразу створіть
+                акаунт.
+              </p>
+              <div className="pr-cta__btns">
+                <Link to="/returns" className="pr-cta__btn pr-cta__btn--outline">
+                  Дивитись дохідність
+                </Link>
+                <Link to="/register" className="pr-cta__btn pr-cta__btn--solid">
+                  Створити акаунт
+                  <ArrowRight size={18} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>

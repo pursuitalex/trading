@@ -45,7 +45,7 @@ export function Footer() {
               </div>
               <div className="footer__actions">
                 <Link to="/login" className="footer__btn footer__btn--outline">
-                  Вхід в аккаунт
+                  Вхід в акаунт
                 </Link>
                 <Link to="/register" className="footer__btn footer__btn--solid">
                   Спробувати Trading

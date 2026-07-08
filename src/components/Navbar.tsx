@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Close, Menu } from './icons'
+import { ArrowUpRight, Burger, Close } from './icons'
 import logoLight from '../../assets/logo/logo-light.svg'
 import logoDark from '../../assets/logo/logo-dark.svg'
 
@@ -10,7 +11,7 @@ const LINKS: { label: string; to?: string; href?: string }[] = [
   { label: 'Гарантії', to: '/guarantees' },
   { label: 'Переваги', to: '/advantages' },
   { label: 'Ціни', to: '/pricing' },
-  { label: 'Як почати', to: '/how-to-start' },
+  { label: 'Як почати?', to: '/how-to-start' },
   { label: 'Контакти', to: '/contacts' },
 ]
 
@@ -31,6 +32,23 @@ export function Navbar({ onLight = false }: { onLight?: boolean }) {
       window.removeEventListener('resize', onScroll)
     }
   }, [])
+
+  // While the full-screen menu is open: lock body scroll + close on Escape.
+  useEffect(() => {
+    if (!open) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const close = () => setOpen(false)
 
   return (
     <motion.header
@@ -97,40 +115,89 @@ export function Navbar({ onLight = false }: { onLight?: boolean }) {
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? <Close /> : <Menu />}
+          <Burger />
         </button>
       </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className="nav__mobile"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {LINKS.map((l) =>
-              l.to ? (
-                <Link key={l.label} to={l.to} onClick={() => setOpen(false)}>
-                  {l.label}
-                </Link>
-              ) : (
-                <a key={l.label} href={l.href} onClick={() => setOpen(false)}>
-                  {l.label}
-                </a>
-              ),
-            )}
-            <Link
-              to="/register"
-              className="btn btn--primary btn--block"
-              onClick={() => setOpen(false)}
+      {/* Full-screen menu (Figma 6677:6878). Portaled to <body> so it escapes
+          the header's transform and covers the viewport. Tablet reuses the same
+          layout, proportionally enlarged (see .navmenu in App.css). */}
+      {createPortal(
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              className="navmenu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Меню"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
-              Спробувати Trading <ArrowRight size={18} />
-            </Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <motion.div
+                className="navmenu__inner"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="navmenu__head">
+                  <span className="navmenu__logo">
+                    <img src={logoDark} alt="Trading.com.ua" width={147} height={36} />
+                  </span>
+                  <button
+                    className="navmenu__close"
+                    type="button"
+                    aria-label="Закрити меню"
+                    onClick={close}
+                  >
+                    <Close size={24} />
+                  </button>
+                </div>
+
+                <div className="navmenu__divider" aria-hidden="true" />
+
+                <nav className="navmenu__list" aria-label="Розділи сайту">
+                  {LINKS.map((l, i) => {
+                    const num = String(i + 1).padStart(2, '0')
+                    const inner = (
+                      <>
+                        <span className="navmenu__num">{num}</span>
+                        <span className="navmenu__label">{l.label}</span>
+                        <ArrowUpRight className="navmenu__arrow" />
+                      </>
+                    )
+                    return l.to ? (
+                      <Link key={l.label} to={l.to} className="navmenu__item" onClick={close}>
+                        {inner}
+                      </Link>
+                    ) : (
+                      <a key={l.label} href={l.href} className="navmenu__item" onClick={close}>
+                        {inner}
+                      </a>
+                    )
+                  })}
+                </nav>
+
+                <div className="navmenu__buttons">
+                  <Link to="/login" className="navmenu__btn navmenu__btn--outline" onClick={close}>
+                    Вхід в акаунт
+                  </Link>
+                  <Link to="/register" className="navmenu__btn navmenu__btn--solid" onClick={close}>
+                    Спробувати Trading
+                  </Link>
+                </div>
+
+                <p className="navmenu__note">
+                  Автоматизована торгівля на фондовому ринку США через рахунок IBKR
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </motion.header>
   )
 }

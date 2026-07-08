@@ -27,6 +27,22 @@
   background-size: 40px 40px;
   -webkit-mask-image: radial-gradient(120% 100% at 30% 20%, #000 40%, transparent 100%);
   mask-image: radial-gradient(120% 100% at 30% 20%, #000 40%, transparent 100%);
+  /* Same slow, continuous diagonal drift as the hero grid (.anim-grid) —
+     pans exactly one 40px cell so the loop is seamless; speed matches the
+     hero (40px / 3.7s ≈ 48px / 4.44s). */
+  animation: authGridPan 3.7s linear infinite;
+}
+@keyframes authGridPan {
+  to {
+    background-position:
+      40px 40px,
+      40px 40px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .auth__aside-grid {
+    animation: none;
+  }
 }
 .auth__aside-inner {
   position: relative;

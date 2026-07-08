@@ -266,7 +266,7 @@ export function HowToStart() {
                 transition={{ duration: 0.5, ease: easeOut }}
               >
                 <Rocket size={15} />
-                Як почати
+                Як почати?
               </motion.span>
               <motion.h1
                 className="how-hero__title"
@@ -526,19 +526,22 @@ export function HowToStart() {
 
         {/* ============ CTA ============ */}
         <section className="section">
-          <div className="container how-cta">
-            <h2 className="how-cta__title">Готові зробити перший крок?</h2>
-            <p className="how-cta__text">
-              Створіть акаунт у Trading.com.ua або спершу подивіться історичну дохідність стратегії.
-            </p>
-            <div className="how-cta__btns">
-              <Link to="/returns" className="how-cta__btn how-cta__btn--outline">
-                Дивитись дохідність
-              </Link>
-              <Link to="/register" className="how-cta__btn how-cta__btn--solid">
-                Створити акаунт
-                <ArrowRight size={18} />
-              </Link>
+          <div className="container">
+            <div className="how-cta">
+              <h2 className="how-cta__title">Готові зробити перший крок?</h2>
+              <p className="how-cta__text">
+                Створіть акаунт у Trading.com.ua або спершу подивіться історичну дохідність
+                стратегії.
+              </p>
+              <div className="how-cta__btns">
+                <Link to="/returns" className="how-cta__btn how-cta__btn--outline">
+                  Дивитись дохідність
+                </Link>
+                <Link to="/register" className="how-cta__btn how-cta__btn--solid">
+                  Створити акаунт
+                  <ArrowRight size={18} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>
