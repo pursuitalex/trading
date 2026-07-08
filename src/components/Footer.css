@@ -190,7 +190,22 @@
   .footer__inner {
     gap: 44px;
   }
+  /* Phone: move the nav links under the logo + tagline. Flatten .footer__main
+     so brand / nav / disclaimer become siblings that can be reordered. */
+  .footer__main {
+    display: contents;
+  }
+  .footer__brand {
+    order: 1;
+  }
+  .footer__nav {
+    order: 2;
+  }
+  .footer__disclaimer {
+    order: 3;
+  }
   .footer__bottom {
+    order: 4;
     flex-direction: column;
     align-items: flex-start;
   }

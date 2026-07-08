@@ -8,16 +8,15 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
+import { CtaLive } from './CtaLive'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut, viewportOnce } from '../lib/motion'
 import {
   Rocket,
   ChevronDown,
-  ArrowRight,
   ArrowUpRight,
   ShieldCheck,
   Landmark,
@@ -524,27 +523,8 @@ export function HowToStart() {
           </div>
         </section>
 
-        {/* ============ CTA ============ */}
-        <section className="section">
-          <div className="container">
-            <div className="how-cta">
-              <h2 className="how-cta__title">Готові зробити перший крок?</h2>
-              <p className="how-cta__text">
-                Створіть акаунт у Trading.com.ua або спершу подивіться історичну дохідність
-                стратегії.
-              </p>
-              <div className="how-cta__btns">
-                <Link to="/returns" className="how-cta__btn how-cta__btn--outline">
-                  Дивитись дохідність
-                </Link>
-                <Link to="/register" className="how-cta__btn how-cta__btn--solid">
-                  Створити акаунт
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ============ CTA — live candlestick banner (Figma 6672:6691) ============ */}
+        <CtaLive />
       </main>
       <Footer />
     </>
