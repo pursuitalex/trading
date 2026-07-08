@@ -5,8 +5,8 @@ import { Reveal } from './primitives'
 import { MapPin, Phone, Mail, Send, Paperclip, Close, CircleCheck } from './icons'
 import './Contacts.css'
 
+const ADDRESS = 'Україна, м. Рівне, Майдан Незалежності, 3, 33000'
 const CONTACTS = [
-  { icon: MapPin, label: 'Адреса', value: 'Україна, м. Рівне, Майдан Незалежності, 3, 33000' },
   { icon: Phone, label: 'Телефон', value: '+38 (050) 200-60-00', href: 'tel:+380502006000' },
   { icon: Send, label: 'Telegram', value: '@trading.com.ua', href: 'https://t.me/trading.com.ua' },
   { icon: Mail, label: 'Email', value: 'info@trading.com.ua', href: 'mailto:info@trading.com.ua' },
@@ -68,10 +68,6 @@ export function Contacts() {
         <section className="section ct__intro-sec">
           <div className="container">
             <Reveal className="ct__intro" variant="fadeUp">
-              <span className="ct__badge">
-                <Mail size={16} />
-                Контакти
-              </span>
               <h1 className="ct__title">Зв'яжіться з нами</h1>
               <p className="ct__lead">
                 Маєте запитання чи хочете почати? Напишіть нам або завітайте до офісу — відповімо
@@ -84,40 +80,55 @@ export function Contacts() {
         {/* Info + form */}
         <section className="section">
           <div className="container ct__grid">
-            {/* Left: contact info */}
-            <Reveal className="ct-info" variant="fadeUp">
-              <ul className="ct-info__list">
-                {CONTACTS.map((c) => {
-                  const Icon = c.icon
-                  return (
-                    <li className="ct-info__item" key={c.label}>
-                      <span className="ct-info__icon">
-                        <Icon size={20} />
-                      </span>
-                      <div className="ct-info__body">
-                        <span className="ct-info__label">{c.label}</span>
-                        {c.href ? (
-                          <a
-                            className="ct-info__value"
-                            href={c.href}
-                            target={c.href.startsWith('http') ? '_blank' : undefined}
-                            rel={c.href.startsWith('http') ? 'noreferrer' : undefined}
-                          >
-                            {c.value}
-                          </a>
-                        ) : (
-                          <span className="ct-info__value">{c.value}</span>
-                        )}
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-              <p className="ct-info__note">
-                Графік роботи офісу — у робочі години. За потреби можлива особиста зустріч із
-                керівником проєкту.
-              </p>
-            </Reveal>
+            {/* Left: address card + contacts list */}
+            <div className="ct-left">
+              <Reveal className="ct-addr" variant="fadeUp">
+                <div className="ct-addr__glow" aria-hidden="true" />
+                <div className="ct-addr__head">
+                  <span className="ct-addr__icon">
+                    <MapPin size={22} />
+                  </span>
+                  <div className="ct-addr__body">
+                    <span className="ct-addr__label">Адреса</span>
+                    <span className="ct-addr__value">{ADDRESS}</span>
+                  </div>
+                </div>
+                <p className="ct-addr__note">
+                  Графік роботи офісу — у робочі години. За потреби можлива особиста зустріч із
+                  керівником проєкту.
+                </p>
+              </Reveal>
+
+              <Reveal className="ct-info" variant="fadeUp" delay={0.06}>
+                <ul className="ct-info__list">
+                  {CONTACTS.map((c) => {
+                    const Icon = c.icon
+                    return (
+                      <li className="ct-info__item" key={c.label}>
+                        <span className="ct-info__icon">
+                          <Icon size={20} />
+                        </span>
+                        <div className="ct-info__body">
+                          <span className="ct-info__label">{c.label}</span>
+                          {c.href ? (
+                            <a
+                              className="ct-info__value"
+                              href={c.href}
+                              target={c.href.startsWith('http') ? '_blank' : undefined}
+                              rel={c.href.startsWith('http') ? 'noreferrer' : undefined}
+                            >
+                              {c.value}
+                            </a>
+                          ) : (
+                            <span className="ct-info__value">{c.value}</span>
+                          )}
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </Reveal>
+            </div>
 
             {/* Right: form */}
             <Reveal className="ct-form-card" variant="fadeUp" delay={0.1}>

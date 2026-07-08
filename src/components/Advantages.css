@@ -455,9 +455,9 @@
 .adv-compare__val {
   flex: none;
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 700;
   font-size: 0.95rem;
-  color: #6a707e;
+  color: var(--brand);
   white-space: nowrap;
 }
 .adv-compare__note {
