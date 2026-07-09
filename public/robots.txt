@@ -1,0 +1,5 @@
+# ⚠️ STAGING — block all crawlers so the unfinished site isn't indexed.
+# Before public launch: allow crawling (Disallow: ) and remove the
+# <meta name="robots" content="noindex"> from index.html.
+User-agent: *
+Disallow: /
