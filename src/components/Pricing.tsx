@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
+import { CtaLive } from './CtaLive'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut, viewportOnce } from '../lib/motion'
@@ -365,9 +366,6 @@ export function Pricing() {
                   <ShieldCheck size={13} />
                   У всіх тарифах
                 </span>
-                <span className="section-head__num section-head__num--light" aria-hidden="true">
-                  04
-                </span>
               </div>
               <h2 className="feature-card__title">Гарантія захисту вкладених коштів</h2>
               <p className="pr-guarantee__lead">
@@ -390,27 +388,13 @@ export function Pricing() {
           </div>
         </section>
 
-        {/* ============ CTA ============ */}
-        <section className="section">
-          <div className="container">
-            <div className="pr-cta">
-              <h2 className="pr-cta__title">Порахуйте свій прибуток</h2>
-              <p className="pr-cta__text">
-                Подивіться історичну дохідність стратегії на обраному періоді або одразу створіть
-                акаунт.
-              </p>
-              <div className="pr-cta__btns">
-                <Link to="/returns" className="pr-cta__btn pr-cta__btn--outline">
-                  Дивитись дохідність
-                </Link>
-                <Link to="/register" className="pr-cta__btn pr-cta__btn--solid">
-                  Створити акаунт
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ============ CTA — shared live-candlestick banner (see CtaLive) ============ */}
+        <CtaLive
+          title="Порахуйте свій прибуток"
+          subtitle="Подивіться історичну дохідність стратегії на обраному періоді або одразу створіть акаунт."
+          secondary={{ label: 'Дивитись дохідність', to: '/returns' }}
+          primary={{ label: 'Створити акаунт', to: '/register' }}
+        />
       </main>
       <Footer />
     </>

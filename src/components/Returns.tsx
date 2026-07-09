@@ -520,9 +520,6 @@ export function Returns() {
               <span className="feature-card__grid" aria-hidden="true" />
               <div className="feature-card__head">
                 <span className="feature-card__badge">Важливо</span>
-                <span className="section-head__num section-head__num--light" aria-hidden="true">
-                  03
-                </span>
               </div>
               <h2 className="feature-card__title">Кредитне плече 1:2</h2>
               <div className="rt-credit__grid2">

@@ -175,6 +175,33 @@ h4 {
   }
 }
 
+/* ---------- Centred section heading (landing-page style: gradient title +
+   centred subtitle, no number). Shared by inner pages that want the main-page
+   head instead of the numbered .section-head (mirrors .calc__head). ---------- */
+.head-center {
+  text-align: center;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.head-center__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #09081a 21.38%, #0022ff 77.84%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.head-center__sub {
+  margin: 1.25rem auto 0;
+  max-width: 56ch;
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: #4a4d61;
+}
+
 /* ---------- Feature card (shared "featured navy" shell) ----------
    The dark, gridded, elevated card used for the one standout guarantee
    per page (Returns' credit leverage, Guarantees' loss protection,

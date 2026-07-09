@@ -11,7 +11,7 @@ import {
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { CtaLive } from './CtaLive'
-import { CountUp, Reveal, SectionHead } from './primitives'
+import { CountUp, Reveal } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut, viewportOnce } from '../lib/motion'
 import {
@@ -354,11 +354,13 @@ export function HowToStart() {
         {/* ============ 01 · Steps ============ */}
         <section className="section" id="how-01">
           <div className="container">
-            <SectionHead
-              num="01"
-              title="5 кроків до старту"
-              sub="Ми не приймаємо ваші кошти на свої рахунки — усе зберігається на вашому рахунку в Interactive Brokers."
-            />
+            <Reveal className="head-center" variant="fadeBlur">
+              <h2 className="head-center__title">5 кроків до старту</h2>
+              <p className="head-center__sub">
+                Ми не приймаємо ваші кошти на свої рахунки — усе зберігається на вашому рахунку в
+                Interactive Brokers.
+              </p>
+            </Reveal>
             <div className="how-path" ref={pathRef}>
               <div className="how-path__linewrap" aria-hidden="true">
                 <motion.div className="how-path__linefill" style={{ height: lineHeight }} />
@@ -414,50 +416,7 @@ export function HowToStart() {
           </div>
         </section>
 
-        {/* ============ 02 · Useful info accordion ============ */}
-        <section className="section">
-          <div className="container">
-            <SectionHead
-              num="02"
-              title="Корисна інформація"
-              sub="Практичні нюанси щодо переказів і документів для клієнтів з України."
-            />
-            <div className="how-acc">
-              {INFO.map((it, i) => {
-                const isOpen = open === i
-                return (
-                  <div className="how-acc__item" key={it.q}>
-                    <button
-                      className="how-acc__q"
-                      aria-expanded={isOpen}
-                      onClick={() => setOpen(isOpen ? null : i)}
-                    >
-                      <span>{it.q}</span>
-                      <span className="how-acc__chev" data-open={isOpen}>
-                        <ChevronDown size={22} />
-                      </span>
-                    </button>
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          className="how-acc__a-wrap"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                        >
-                          <div className="how-acc__a">{it.a}</div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ============ 03 · Taxes + martial-law exemption (featured, shared shell) ============ */}
+        {/* ============ 02 · Taxes + martial-law exemption (featured, shared shell) ============ */}
         <section className="section">
           <div className="container">
             <Reveal className="feature-card" variant="fadeUp">
@@ -466,9 +425,6 @@ export function HowToStart() {
                 <span className="feature-card__badge">
                   <ShieldCheck size={13} />
                   Пільга воєнного стану
-                </span>
-                <span className="section-head__num section-head__num--light" aria-hidden="true">
-                  03
                 </span>
               </div>
               <h2 className="feature-card__title">Податки та обмін інформацією (CRS)</h2>
@@ -520,6 +476,52 @@ export function HowToStart() {
                 <ArrowUpRight size={14} />
               </a>
             </Reveal>
+          </div>
+        </section>
+
+        {/* ============ Useful info — heading left · accordion right (~2/3) ============ */}
+        <section className="section">
+          <div className="container">
+            <div className="how-info">
+              <div className="how-info__head">
+                <h2 className="section-head__title">Корисна інформація</h2>
+                <p className="section-head__sub">
+                  Практичні нюанси щодо переказів і документів для клієнтів з України.
+                </p>
+              </div>
+              <div className="how-acc">
+                {INFO.map((it, i) => {
+                  const isOpen = open === i
+                  return (
+                    <div className="how-acc__item" key={it.q}>
+                      <button
+                        className="how-acc__q"
+                        aria-expanded={isOpen}
+                        onClick={() => setOpen(isOpen ? null : i)}
+                      >
+                        <span>{it.q}</span>
+                        <span className="how-acc__chev" data-open={isOpen}>
+                          <ChevronDown size={22} />
+                        </span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            className="how-acc__a-wrap"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                          >
+                            <div className="how-acc__a">{it.a}</div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </section>
 

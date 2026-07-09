@@ -9,9 +9,9 @@
   border-radius: clamp(24px, 3vw, 40px);
   padding: clamp(2.75rem, 7vw, 110px) clamp(1.5rem, 8vw, 118px);
   text-align: center;
-  /* Exact Figma radial gradient (6672:6691): centre at 50% 131%, radii
-     74.6% × 148.9%, #f1c0ff → #f4f7ff @45% → #fff. */
-  background: radial-gradient(74.6% 148.9% at 50% 131%, #f1c0ff 0%, #f4f7ff 45%, #ffffff 100%);
+  /* Radial gradient (from Figma 6672:6691, vertical radius tightened to 100%):
+     centre at 50% 131%, radii 74.6% × 100%, #f1c0ff → #f4f7ff @45% → #fff. */
+  background: radial-gradient(74.6% 100% at 50% 131%, #f1c0ff 0%, #f4f7ff 45%, #ffffff 100%);
   border: 1px solid rgba(224, 229, 235, 0.8);
   box-shadow: 0 30px 70px -40px rgba(90, 60, 180, 0.28);
 }
@@ -41,7 +41,7 @@
   width: 168px;
   height: 168px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(158, 120, 255, 0.42), transparent 64%);
+  background: radial-gradient(circle, rgba(158, 120, 255, 0.12), transparent 64%);
   filter: blur(16px);
   pointer-events: none;
 }
@@ -111,7 +111,7 @@
 @keyframes ctaLiveFloat {
   0%,
   100% {
-    transform: translateX(-50%) translateY(0) rotate(-1.6deg);
+    transform: translateX(-50%) translateY(0);
   }
   50% {
     transform: translateX(-50%) translateY(-11px) rotate(1.6deg);

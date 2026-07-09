@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
-import { CountUp, Reveal, SectionHead } from './primitives'
+import { CtaLive } from './CtaLive'
+import { CountUp, Reveal } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut, viewportOnce } from '../lib/motion'
 import {
@@ -12,7 +12,6 @@ import {
   Globe,
   Landmark,
   Check,
-  ArrowRight,
   ChevronDown,
   ShieldCheck,
 } from './icons'
@@ -222,11 +221,12 @@ export function Advantages() {
         {/* ============ 01 · Key advantages (bento) ============ */}
         <section className="section" id="adv-01">
           <div className="container">
-            <SectionHead
-              num="01"
-              title="Ключові переваги"
-              sub="Головні причини, чому цей рахунок вигідніший за звичні способи зберігати гроші."
-            />
+            <Reveal className="head-center" variant="fadeBlur">
+              <h2 className="head-center__title">Ключові переваги</h2>
+              <p className="head-center__sub">
+                Головні причини, чому цей рахунок вигідніший за звичні способи зберігати гроші.
+              </p>
+            </Reveal>
             <div className="adv-bento">
               <Reveal className="adv-bento__feature" variant="fadeUp">
                 <span className="adv-icon">
@@ -279,11 +279,12 @@ export function Advantages() {
         {/* ============ 02 · Better than alternatives ============ */}
         <section className="section">
           <div className="container">
-            <SectionHead
-              num="02"
-              title="Вигідніше за інші варіанти"
-              sub="Орієнтовне порівняння річної дохідності з поширеними альтернативами."
-            />
+            <Reveal className="head-center" variant="fadeBlur">
+              <h2 className="head-center__title">Вигідніше за інші варіанти</h2>
+              <p className="head-center__sub">
+                Орієнтовне порівняння річної дохідності з поширеними альтернативами.
+              </p>
+            </Reveal>
             <div className="adv-compare">
               <Reveal className="adv-compare__anchor" variant="fadeUp">
                 <span className="adv-compare__anchor-label">Наша стратегія</span>
@@ -324,9 +325,6 @@ export function Advantages() {
                   <ShieldCheck size={13} />
                   Ризик під контролем
                 </span>
-                <span className="section-head__num section-head__num--light" aria-hidden="true">
-                  03
-                </span>
               </div>
               <h2 className="feature-card__title">А якщо настане світова криза?</h2>
               <p className="adv-crisis__intro">Так, така ймовірність існує. Але вона під контролем:</p>
@@ -360,26 +358,11 @@ export function Advantages() {
           </div>
         </section>
 
-        {/* ============ CTA ============ */}
-        <section className="section">
-          <div className="container">
-            <div className="adv-cta">
-              <h2 className="adv-cta__title">Порахуйте свою вигоду</h2>
-              <p className="adv-cta__text">
-                Подивіться історичну дохідність стратегії на обраному періоді або створіть акаунт.
-              </p>
-              <div className="adv-cta__btns">
-                <Link to="/returns" className="adv-cta__btn adv-cta__btn--outline">
-                  Дивитись дохідність
-                </Link>
-                <Link to="/register" className="adv-cta__btn adv-cta__btn--solid">
-                  Створити акаунт
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ============ CTA — shared live-candlestick banner (see CtaLive) ============ */}
+        <CtaLive
+          title="Порахуйте свою вигоду"
+          subtitle="Подивіться історичну дохідність стратегії на обраному періоді або створіть акаунт."
+        />
       </main>
       <Footer />
     </>

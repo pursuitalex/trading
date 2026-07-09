@@ -478,6 +478,22 @@
   color: #1a1e35;
 }
 
+/* ---------------- Useful info — heading left · accordion right (~2/3).
+   Reuses the .adv-compare split: grid + align-items:start + sticky head. ---------------- */
+.how-info {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+.how-info__head {
+  position: sticky;
+  top: 96px;
+}
+.how-info__head .section-head__sub {
+  margin-top: 0.85rem;
+}
+
 /* ---- Tax section — shell shared (.feature-card* in index.css);
    copy | stat split is this page's own content ---- */
 .how-tax__grid {
@@ -564,6 +580,12 @@
 @media (max-width: 860px) {
   .how-tax__grid {
     grid-template-columns: 1fr;
+  }
+  .how-info {
+    grid-template-columns: 1fr;
+  }
+  .how-info__head {
+    position: static;
   }
   /* zigzag path → simple left-aligned stepper (matches the site's other
      timelines' mobile fallback: the spine moves to the left edge, the

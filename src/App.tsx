@@ -10,6 +10,7 @@ import { Pricing } from './components/Pricing'
 import { HowToStart } from './components/HowToStart'
 import { Contacts } from './components/Contacts'
 import { PagesIndex } from './components/PagesIndex'
+import { DesignSystem } from './components/DesignSystem'
 import './App.css'
 
 /**
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/how-to-start" element={<HowToStart />} />
         <Route path="/contacts" element={<Contacts />} />
         <Route path="/pages" element={<PagesIndex />} />
+        <Route path="/design-system" element={<DesignSystem />} />
         <Route path="/login" element={<AuthPage mode="login" />} />
         <Route path="/register" element={<AuthPage mode="register" />} />
         <Route path="*" element={<Landing />} />

@@ -1,12 +1,11 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
+import { CtaLive } from './CtaLive'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
 import { easeOut, viewportOnce } from '../lib/motion'
 import {
-  ArrowRight,
   Calendar,
   Check,
   ChevronDown,
@@ -510,26 +509,8 @@ export function Guarantees() {
           </div>
         </section>
 
-        {/* ============ CTA ============ */}
-        <section className="section">
-          <div className="container">
-            <div className="grt-cta">
-              <h2 className="grt-cta__title">Готові почати з упевненістю?</h2>
-              <p className="grt-cta__text">
-                Подивіться історичну дохідність стратегії або одразу створіть акаунт.
-              </p>
-              <div className="grt-cta__btns">
-                <Link to="/returns" className="grt-cta__btn grt-cta__btn--outline">
-                  Дивитись дохідність
-                </Link>
-                <Link to="/register" className="grt-cta__btn grt-cta__btn--solid">
-                  Створити акаунт
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ============ CTA — shared live-candlestick banner (see CtaLive) ============ */}
+        <CtaLive />
       </main>
       <Footer />
     </>

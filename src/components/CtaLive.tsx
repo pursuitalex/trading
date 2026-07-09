@@ -33,7 +33,23 @@ const CANDLES: { x: number; y: number; h: number; up: 0 | 1 }[] = [
   { x: 253, y: 13, h: 33, up: 1 },
 ]
 
-export function CtaLive() {
+type CtaLiveProps = {
+  title?: string
+  subtitle?: string
+  /** solid (primary) button */
+  primary?: { label: string; to: string }
+  /** ghost (secondary) button */
+  secondary?: { label: string; to: string }
+}
+
+/* Shared live-candlestick CTA banner. The design lives here once; each page
+   passes its own copy via props (defaults below are the how-to-start wording). */
+export function CtaLive({
+  title = 'Готові почати з упевненістю?',
+  subtitle = 'Подивіться історичну дохідність стратегії або одразу створіть акаунт.',
+  primary = { label: 'Створити акаунт', to: '/register' },
+  secondary = { label: 'Дивитись дохідність', to: '/returns' },
+}: CtaLiveProps = {}) {
   return (
     <section className="section">
       <div className="container">
@@ -59,19 +75,17 @@ export function CtaLive() {
             </div>
 
             <div className="cta-live__heading">
-              <h2 className="cta-live__title">Готові почати з упевненістю?</h2>
-              <p className="cta-live__sub">
-                Подивіться історичну дохідність стратегії або одразу створіть акаунт.
-              </p>
+              <h2 className="cta-live__title">{title}</h2>
+              <p className="cta-live__sub">{subtitle}</p>
             </div>
 
             <div className="cta-live__btns">
-              <Link to="/returns" className="cta-live__btn cta-live__btn--ghost">
-                Дивитись дохідність
+              <Link to={secondary.to} className="cta-live__btn cta-live__btn--ghost">
+                {secondary.label}
               </Link>
-              <Link to="/register" className="cta-live__btn cta-live__btn--solid">
+              <Link to={primary.to} className="cta-live__btn cta-live__btn--solid">
                 <Rocket size={20} />
-                Створити акаунт
+                {primary.label}
               </Link>
             </div>
           </div>
