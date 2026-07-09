@@ -44,6 +44,10 @@
   position: relative;
   min-height: 100vh; /* fills the viewport */
   display: grid;
+  /* single column that can shrink below its content's min-content, so the wide
+     comparison table (min-width 560px) scrolls inside its own wrap instead of
+     stretching the whole section past the viewport */
+  grid-template-columns: minmax(0, 1fr);
   align-content: center; /* centre when short; grows with tall content, no shrink/overflow */
   color: #fff;
 }

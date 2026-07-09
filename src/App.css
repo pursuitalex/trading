@@ -918,6 +918,10 @@ main {
   .card__figures {
     gap: 1.25rem;
   }
+  /* wrap the Value/Performance tabs below the figures so row 1 fits the card */
+  .card__row1 {
+    flex-wrap: wrap;
+  }
 }
 
 @media (max-width: 420px) {
