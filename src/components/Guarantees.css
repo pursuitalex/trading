@@ -661,134 +661,114 @@
 .grt .feature-card__badge svg {
   color: #ffd873;
 }
-/* ---- 04 · Головна гарантія — flagship trust card ----
-   Soft top-right light source + an editorial hairline term list (no nested
-   cards); scoped to this card via .grt-guarantee, shared shell untouched. */
-.grt-guarantee__glow {
-  position: absolute;
-  z-index: -1;
-  top: -32%;
-  right: -6%;
-  width: 52%;
-  height: 118%;
-  background: radial-gradient(closest-side, rgba(96, 132, 255, 0.33), transparent 72%);
-  filter: blur(22px);
-  pointer-events: none;
-}
-.grt-guarantee__grid2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(26px, 4vw, 56px);
-  align-items: start;
-}
-/* Section-head style heading in the left column: the outlined 04 sits to the
-   left of the title; the title matches the standard section-heading size. */
-.grt-guarantee__head {
+/* ---- 04 · Loss protection — light bento: a featured statement block over a
+   horizontal row of detail cards (mirrors the .adv-bento look). ---- */
+.grt-prot {
   display: flex;
-  align-items: center;
-  gap: clamp(12px, 2vw, 24px);
-  margin-bottom: clamp(16px, 2vw, 22px);
+  flex-direction: column;
+  gap: 20px;
 }
-.grt-guarantee__head .grt-guarantee__title {
-  margin: 0;
-  min-width: 0;
-  font-size: clamp(1.6rem, 2.7vw, 2.35rem);
-  line-height: 1.18;
+.grt-prot__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 2.5vw, 32px);
+  flex-wrap: wrap;
+  padding: clamp(24px, 3.2vw, 40px);
+  border-radius: 22px;
+  background: linear-gradient(120deg, #eaf1ff 0%, #fbfcff 60%);
+  border: 1px solid rgba(28, 105, 227, 0.14);
+  box-shadow: 0 14px 40px -22px rgba(26, 84, 231, 0.22);
 }
-@media (max-width: 720px) {
-  .grt-guarantee__head {
-    align-items: flex-start;
-  }
+.grt-prot__feature-body {
+  flex: 1;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.grt-guarantee__lead {
-  font-family: var(--font-body);
-  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-  font-weight: 450;
-  line-height: 1.5;
-  color: #fff;
-  text-wrap: balance;
-}
-.grt-guarantee__note {
-  margin-top: clamp(18px, 2.4vw, 26px);
-  padding-top: clamp(16px, 2vw, 20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.64);
-}
-.grt-guarantee__note-k {
-  display: block;
-  margin-bottom: 8px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.6875rem;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: #9ab6ff;
-}
-.grt-terms {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.grt-term {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 16px;
-  align-items: start;
-  padding: clamp(15px, 1.9vw, 20px) 14px;
-  border-radius: 12px;
-  transition: background 240ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.grt-term + .grt-term {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-.grt-term:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-.grt-term__marker {
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  color: #cfe0ff;
-  transition:
-    border-color 240ms ease,
-    background 240ms ease,
-    color 240ms ease,
-    transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.grt-term:hover .grt-term__marker {
-  border-color: rgba(122, 150, 255, 0.75);
-  background: rgba(122, 150, 255, 0.16);
-  color: #e6edff;
-  transform: scale(1.07);
-}
-.grt-term__title {
+.grt-prot__title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.0313rem;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: #fff;
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #09081a;
 }
-.grt-term__text {
-  margin-top: 5px;
+.grt-prot__lead {
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.7);
-  max-width: 48ch;
+  font-size: clamp(1.0625rem, 1.4vw, 1.2rem);
+  line-height: 1.5;
+  color: #3f4356;
+  text-wrap: balance;
 }
-@media (prefers-reduced-motion: reduce) {
-  .grt-term,
-  .grt-term__marker {
-    transition: none;
+.grt-prot__note {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #4a4d61;
+}
+.grt-prot__note-k {
+  display: inline-block;
+  margin-right: 8px;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1c69e3;
+}
+.grt-prot__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.grt-prot__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid rgba(224, 229, 235, 0.7);
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 10px 30px -16px rgba(8, 16, 45, 0.1);
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s ease;
+}
+.grt-prot__card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 1px 1.5px rgba(0, 0, 0, 0.04),
+    0 18px 40px -18px rgba(8, 16, 45, 0.16);
+}
+.grt-prot__card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+}
+.grt-prot__card-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #09081a;
+}
+.grt-prot__card-text {
+  font-family: var(--font-body);
+  font-size: 0.925rem;
+  line-height: 1.55;
+  color: #4a4d61;
+}
+@media (max-width: 900px) {
+  .grt-prot__row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .grt-prot__row {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -837,27 +817,18 @@
   gap: clamp(16px, 2cqw, 26px);
   padding: 6% clamp(16px, 3cqw, 40px) 6% clamp(22px, 6cqw, 72px);
 }
-.grt-inc__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  height: 36px;
-  padding: 0 16px;
-  border-radius: 19px;
-  background: rgba(0, 188, 125, 0.16);
-  border: 1px solid rgba(110, 242, 176, 0.32);
+.grt-inc__title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(0.74rem, 1.05cqw, 0.94rem);
-  color: #8ff7c6;
-  white-space: nowrap;
-}
-.grt-inc__pill i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #6ef2b0;
-  box-shadow: 0 0 0 3px rgba(110, 242, 176, 0.2);
+  font-size: clamp(1.5rem, 3cqw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  /* white → mint gradient text, matching .vt__title on the landing */
+  background: linear-gradient(90deg, #ffffff 0%, #83ffc1 83%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
 }
 .grt-inc__text {
   max-width: 40ch;

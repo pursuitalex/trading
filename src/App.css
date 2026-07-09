@@ -2,12 +2,12 @@
    Trading.com.ua — Navbar + Hero (faithful light/navy design)
    ============================================================ */
 
-/* ---------------- Section rhythm: 120px between sections ---------------- */
+/* ---------------- Section rhythm: 120px between sections (desktop cap) ---------------- */
 main > section + section {
-  margin-top: clamp(72px, 10vw, 140px);
+  margin-top: clamp(72px, 10vw, 120px);
 }
 main {
-  padding-bottom: clamp(72px, 10vw, 140px);
+  padding-bottom: clamp(72px, 10vw, 120px);
 }
 
 /* ---------------- Navbar ---------------- */

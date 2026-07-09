@@ -4,7 +4,7 @@ import { Footer } from './Footer'
 import { CtaLive } from './CtaLive'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
-import { easeOut, viewportOnce } from '../lib/motion'
+import { easeOut } from '../lib/motion'
 import {
   Calendar,
   Check,
@@ -404,67 +404,48 @@ export function Guarantees() {
           </div>
         </section>
 
-        {/* ============ 04 · Loss protection (featured, navy) ============ */}
+        {/* ============ 04 · Loss protection — light bento (feature + horizontal cards) ============ */}
         <section className="section">
           <div className="container">
-            <Reveal className="feature-card grt-guarantee" variant="fadeUp">
-              <span className="feature-card__grid" aria-hidden="true" />
-              <span className="grt-guarantee__glow" aria-hidden="true" />
-              <div className="grt-guarantee__grid2">
-                <div className="grt-guarantee__copy">
-                  <div className="grt-guarantee__head">
-                    <span
-                      className="section-head__num section-head__num--light"
-                      aria-hidden="true"
-                    >
-                      04
-                    </span>
-                    <h2 className="feature-card__title grt-guarantee__title">
-                      Гарантія захисту особисто вкладених коштів
-                    </h2>
-                  </div>
-                  <p className="grt-guarantee__lead">
+            <div className="grt-prot">
+              <Reveal className="grt-prot__feature" variant="fadeUp">
+                <span className="grt-icon" aria-hidden="true">
+                  <ShieldCheck size={26} />
+                </span>
+                <div className="grt-prot__feature-body">
+                  <h2 className="grt-prot__title">Гарантія захисту особисто вкладених коштів</h2>
+                  <p className="grt-prot__lead">
                     У найгіршому випадку ми компенсуємо різницю, щоб сума на вашому рахунку ніколи не
                     була меншою за всі ваші особисті вкладення за весь період.
                   </p>
-                  <p className="grt-guarantee__note">
-                    <span className="grt-guarantee__note-k">Як це працює</span>
+                  <p className="grt-prot__note">
+                    <span className="grt-prot__note-k">Як це працює</span>
                     Від загальної суми на рахунку віднімається весь зароблений нами для вас прибуток.
                     Якщо результат виявиться меншим за ваші вкладення — ми компенсуємо нестачу.
                   </p>
                 </div>
-                <ul className="grt-terms">
-                  {FEATURE_DETAILS.map((d, i) => {
-                    const Icon = d.icon
-                    return (
-                      <motion.li
-                        className="grt-term"
-                        key={d.title}
-                        initial={{ opacity: 0, y: 14 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={viewportOnce}
-                        transition={{ delay: 0.06 * i, duration: 0.5, ease: easeOut }}
-                      >
-                        <span className="grt-term__marker" aria-hidden="true">
-                          <Icon size={17} />
-                        </span>
-                        <div className="grt-term__body">
-                          <h4 className="grt-term__title">{d.title}</h4>
-                          <p className="grt-term__text">{d.text}</p>
-                        </div>
-                      </motion.li>
-                    )
-                  })}
-                </ul>
+              </Reveal>
+              <div className="grt-prot__row">
+                {FEATURE_DETAILS.map((d) => {
+                  const Icon = d.icon
+                  return (
+                    <Reveal className="grt-prot__card" variant="fadeUp" key={d.title}>
+                      <span className="grt-icon grt-prot__card-icon" aria-hidden="true">
+                        <Icon size={20} />
+                      </span>
+                      <h3 className="grt-prot__card-title">{d.title}</h3>
+                      <p className="grt-prot__card-text">{d.text}</p>
+                    </Reveal>
+                  )
+                })}
               </div>
-            </Reveal>
+            </div>
           </div>
         </section>
 
         {/* ============ 05 · Aligned incentives ============ */}
         <section className="section">
           <div className="container">
-            <SectionHead num="05" title="Наші інтереси збігаються з вашими" />
             <Reveal className="grt-inc" variant="fadeUp">
               <picture className="grt-inc__bg">
                 <source srcSet={handshakeMobile} media="(max-width: 560px)" />
@@ -476,10 +457,7 @@ export function Guarantees() {
               </picture>
               <div className="grt-inc__scrim" aria-hidden="true" />
               <div className="grt-inc__copy">
-                <span className="grt-inc__pill">
-                  <i aria-hidden="true" />
-                  Комісія лише від прибутку
-                </span>
+                <h2 className="grt-inc__title">Наші інтереси збігаються з вашими</h2>
                 <p className="grt-inc__text">
                   Ми отримуємо комісію лише від вашого прибутку. Тому ми максимально
                   зацікавлені збільшувати його — <b>це однаково вигідно і вам, і нам.</b>
