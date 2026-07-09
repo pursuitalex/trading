@@ -130,31 +130,6 @@
   }
 }
 
-/* ---------------- Illustration placeholder ---------------- */
-.rt-slot {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 220px;
-  padding: 24px;
-  border-radius: 24px;
-  border: 2px dashed rgba(28, 105, 227, 0.35);
-  background: rgba(28, 105, 227, 0.04);
-  color: #5b6da6;
-  text-align: center;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  line-height: 1.45;
-}
-.rt-slot--dark {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.65);
-}
-
 /* ---------------- Hero animated trading-terminal card ---------------- */
 .rt-hchart {
   flex: 1;
@@ -623,9 +598,31 @@
 .rt-credit__grid2 {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: clamp(20px, 3.5vw, 40px);
-  margin-top: 18px;
+  gap: clamp(24px, 3.5vw, 48px);
   align-items: stretch;
+}
+.rt-credit__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+.rt-credit__copy .feature-card__title {
+  margin-top: 0;
+}
+/* illustration fills the full height of the right column (no title above it) */
+.rt-credit__art {
+  position: relative;
+  min-height: 300px;
+}
+.rt-credit__art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 26px 46px rgba(4, 10, 40, 0.5));
 }
 .rt-credit__copy p {
   font-family: var(--font-body);
@@ -638,7 +635,7 @@
   align-items: baseline;
   flex-wrap: wrap;
   gap: clamp(10px, 1.6vw, 20px);
-  margin: 22px 0;
+  margin: 6px 0;
   font-family: var(--font-display);
   font-weight: 600;
   font-size: clamp(2.1rem, 4.6vw, 3.4rem);
@@ -686,8 +683,8 @@
   align-items: flex-end;
   gap: 7px;
   flex: 1; /* fills whatever extra height the taller Q&A column adds */
-  min-height: 220px;
-  padding-top: 44px; /* headroom so the "+42.6%" label never overlaps the tallest bar */
+  min-height: 240px;
+  padding: 10px 0 0 42px; /* top headroom (peak label) + left gutter (y-axis scale) */
 }
 .rt-comp__col {
   position: relative;
@@ -711,30 +708,67 @@
   font-size: 0.72rem;
   color: #9aa1b2;
 }
+/* y-axis scale: faint gridlines with % labels in the left gutter */
+.rt-comp__gl {
+  position: absolute;
+  left: 42px;
+  right: 0;
+  height: 0;
+  border-top: 1px dashed #edeff5;
+  z-index: 0;
+}
+.rt-comp__gl span {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  margin-right: 9px;
+  transform: translateY(-50%);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.66rem;
+  color: #aab0be;
+  white-space: nowrap;
+}
+/* simple-interest reference at 36% — label sits left, over the short bars */
 .rt-comp__simple {
   position: absolute;
-  left: 0;
+  left: 42px;
   right: 0;
+  height: 0;
   border-top: 2px dashed #b3bdd6;
   z-index: 1;
   pointer-events: none;
 }
-.rt-comp__simple span {
+.rt-comp__simple-lbl {
   position: absolute;
-  right: 0;
-  top: 4px;
+  left: 0;
+  bottom: 6px;
+  padding: 2px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
   font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.78rem;
-  color: #7a8299;
+  font-weight: 600;
+  font-size: 0.76rem;
+  color: #6a7189;
+  white-space: nowrap;
 }
-.rt-comp__final {
+/* compound peak at 42.6% — the tallest bar tops out on this line */
+.rt-comp__peak {
+  position: absolute;
+  left: 42px;
+  right: 0;
+  height: 0;
+  border-top: 2px dashed #63d19b;
+  z-index: 1;
+  pointer-events: none;
+}
+.rt-comp__peak-lbl {
   position: absolute;
   right: 0;
-  top: 2px; /* sits inside the chart's reserved top headroom, clear of the tallest bar */
+  bottom: 7px;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #00a35c;
 }
 .rt-comp__axis {
@@ -787,9 +821,45 @@
   color: #3f4356;
 }
 
-/* ---------------- 05 · Verify: waiting timeline + office note ---------------- */
-.rt-wait {
-  padding: 30px 30px 26px;
+/* ---------------- 05 · Verify: office-visit hint under the chart ---------------- */
+.rt-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: rgba(28, 105, 227, 0.05);
+  border: 1px solid rgba(28, 105, 227, 0.13);
+}
+.rt-tip__k {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1c69e3;
+}
+.rt-tip__body p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: #3f4356;
+}
+
+/* ---- Full-width returns chart on top, office-visit hint below ---- */
+.rt-verify-a {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3.5vw, 40px);
+}
+
+/* ---- Returns chart — white card, blue→violet line, period switcher ---- */
+.rt-graph {
+  position: relative;
+  width: 100%;
+  padding: clamp(18px, 2.4vw, 26px) clamp(18px, 2.4vw, 30px) clamp(16px, 2vw, 22px);
   border-radius: 20px;
   background: #fff;
   border: 1px solid rgba(224, 229, 235, 0.7);
@@ -797,136 +867,207 @@
     0 1px 1.5px rgba(0, 0, 0, 0.04),
     0 10px 30px -16px rgba(8, 16, 45, 0.1);
 }
-.rt-wait__track {
-  position: relative;
-  height: 96px;
-  margin-top: 6px;
-}
-.rt-wait__linewrap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 11px;
-  height: 2px;
-}
-.rt-wait__linefill {
-  height: 2px;
-  background: repeating-linear-gradient(90deg, #7f97e8 0 7px, transparent 7px 14px);
-}
-.rt-wait__ms {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
+.rt-graph__head {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 18px;
 }
-.rt-wait__ms--first {
-  transform: translateX(0);
-  align-items: flex-start;
-}
-.rt-wait__ms--last {
-  transform: translateX(-100%);
-  align-items: flex-end;
-}
-.rt-wait__dot {
-  border-radius: 50%;
-  background: radial-gradient(circle at 50% 120%, #6783ff, #475ffa);
-  border: 3px solid #fff;
-  box-shadow:
-    0 0 0 1.5px rgba(71, 95, 250, 0.4),
-    0 4px 10px rgba(71, 95, 250, 0.35);
-}
-/* the wait pays off: milestones grow, the last one turns green */
-.rt-wait__dot--0 {
-  width: 14px;
-  height: 14px;
-  margin-top: 5px;
-}
-.rt-wait__dot--1 {
-  width: 18px;
-  height: 18px;
-  margin-top: 3px;
-}
-.rt-wait__dot--2 {
-  width: 24px;
-  height: 24px;
-  margin-top: 0;
-  background: radial-gradient(circle at 50% 120%, #34d399, #00a35c);
-  box-shadow:
-    0 0 0 1.5px rgba(0, 163, 92, 0.4),
-    0 4px 12px rgba(0, 163, 92, 0.35);
-}
-.rt-wait__meta {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 14px;
-  align-items: center;
-  text-align: center;
-}
-.rt-wait__ms--first .rt-wait__meta {
-  align-items: flex-start;
-  text-align: left;
-}
-.rt-wait__ms--last .rt-wait__meta {
-  align-items: flex-end;
-  text-align: right;
-}
-.rt-wait__meta strong {
+.rt-graph__label {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.15rem;
+  font-size: 1.0625rem;
   letter-spacing: -0.01em;
   color: #09081a;
 }
-.rt-wait__meta span {
+/* segmented period switcher */
+.rt-graph__seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #f1f3f9;
+}
+.rt-graph__seg-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 9px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: #5b646f;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.rt-graph__seg-btn:hover {
+  color: #1d213a;
+}
+.rt-graph__seg-btn[aria-pressed='true'] {
+  background: #fff;
+  color: #3346e0;
+  font-weight: 600;
+  box-shadow:
+    0 1px 2px rgba(8, 16, 45, 0.06),
+    0 4px 12px -4px rgba(8, 16, 45, 0.14);
+}
+/* legend: solid gradient = our algorithm, dashed = S&P 500 */
+.rt-graph__legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #6a707e;
+}
+.rt-graph__lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.rt-graph__lg-algo {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #475ffa, #9e78ff);
+}
+.rt-graph__lg-sp {
+  width: 18px;
+  height: 0;
+  border-top: 2px dashed #a7b0c8;
+}
+.rt-graph__plot {
+  position: relative;
+  margin-top: clamp(14px, 2vw, 22px);
+  height: clamp(210px, 26vw, 300px);
+}
+/* the svg stretches to the canvas box (preserveAspectRatio=none), so the
+   chart always stays inside the card — no aspect-ratio driven overflow */
+.rt-graph__canvas {
+  position: absolute;
+  inset: 0 0 26px 0;
+}
+.rt-graph__canvas svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.rt-graph__wipe {
+  position: absolute;
+  inset: 0;
+}
+/* dashed S&P 500 comparison line */
+.rt-graph__spline {
+  fill: none;
+  stroke: #a7b0c8;
+  stroke-width: 2;
+  stroke-dasharray: 6 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.rt-graph__grid {
+  stroke: #e9ebf4;
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+  vector-effect: non-scaling-stroke;
+}
+.rt-graph__dot {
+  position: absolute;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9e78ff;
+  border: 2.5px solid #fff;
+  box-shadow:
+    0 0 0 5px rgba(158, 120, 255, 0.16),
+    0 6px 14px rgba(96, 60, 190, 0.35);
+}
+.rt-graph__pct {
+  position: absolute;
+  z-index: 2;
+  padding: 5px 11px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #475ffa, #9e78ff);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.84rem;
+  white-space: nowrap;
+  box-shadow: 0 10px 22px -8px rgba(96, 60, 190, 0.55);
+}
+/* muted end-of-line label for the dashed S&P 500 line */
+.rt-graph__sp-pct {
+  position: absolute;
+  z-index: 2;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid #e6e9f2;
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.72rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
   color: #8a90a2;
+  white-space: nowrap;
 }
-.rt-wait__ms--last .rt-wait__meta span {
-  color: #00a35c;
-}
-.rt-wait__caption {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid #f0f2f7;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #3f4356;
-}
-.rt-office {
+.rt-graph__months {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 0;
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  padding: 20px 24px;
-  border-radius: 16px;
-  background: rgba(28, 105, 227, 0.06);
-  border: 1px solid rgba(28, 105, 227, 0.14);
-}
-.rt-office p {
+  justify-content: space-between;
   font-family: var(--font-body);
-  font-size: 0.995rem;
-  line-height: 1.6;
-  color: #2b3350;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #9aa1b2;
 }
-
-/* ---- Horizontal split — copy (timeline + note) | illustration ---- */
-.rt-verify-a {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: clamp(20px, 3.5vw, 36px);
-  align-items: stretch;
+/* explanation under the chart; the period phrases are live controls
+   synced with the switcher */
+.rt-graph__note {
+  margin-top: clamp(16px, 2vw, 20px);
+  padding-top: clamp(14px, 1.8vw, 18px);
+  border-top: 1px solid #eef0f6;
+  font-family: var(--font-body);
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: #4a4d61;
 }
-.rt-verify-a__copy {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+.rt-graph__phrase {
+  padding: 1px 7px;
+  margin: 0 -2px;
+  border-radius: 7px;
+  background: rgba(71, 95, 250, 0.07);
+  font: inherit;
+  color: #3f4a9e;
+  cursor: pointer;
+  transition:
+    background 0.22s ease,
+    color 0.22s ease;
+}
+.rt-graph__phrase:hover {
+  background: rgba(71, 95, 250, 0.13);
+  color: #3346e0;
+}
+.rt-graph__phrase[aria-pressed='true'] {
+  background: linear-gradient(90deg, rgba(71, 95, 250, 0.16), rgba(158, 120, 255, 0.2));
+  color: #3346e0;
+  font-weight: 600;
+}
+@media (max-width: 560px) {
+  .rt-graph__seg-btn {
+    padding: 0 10px;
+  }
+  .rt-graph__months span:nth-child(even) {
+    display: none;
+  }
 }
 
 /* ---------------- Notifications (graphical: mock alerts + copy) ---------------- */
@@ -1105,42 +1246,6 @@
   }
   .rt-credit__grid2 {
     grid-template-columns: 1fr;
-  }
-  .rt-verify-a {
-    grid-template-columns: 1fr;
-  }
-  /* waiting timeline: horizontal → vertical */
-  .rt-wait__track {
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .rt-wait__linewrap {
-    display: none;
-  }
-  .rt-wait__ms,
-  .rt-wait__ms--first,
-  .rt-wait__ms--last {
-    position: static;
-    transform: none;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
-  }
-  .rt-wait__dot--0,
-  .rt-wait__dot--1,
-  .rt-wait__dot--2 {
-    margin-top: 0;
-  }
-  .rt-wait__meta,
-  .rt-wait__ms--first .rt-wait__meta,
-  .rt-wait__ms--last .rt-wait__meta {
-    margin-top: 0;
-    flex-direction: row;
-    align-items: baseline;
-    gap: 8px;
-    text-align: left;
   }
   .rt-noti--tg {
     margin-left: 12px;

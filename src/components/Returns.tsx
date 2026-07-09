@@ -1,4 +1,4 @@
-import { useMemo, type CSSProperties } from 'react'
+import { useMemo, useState, type CSSProperties } from 'react'
 import { motion } from 'framer-motion'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
@@ -16,24 +16,19 @@ import {
   Eye,
   HelpCircle,
   Mail,
-  Photo,
   Search,
   Send,
   TrendingUp,
   Wallet,
 } from './icons'
 import smallSign from '../../assets/logo/small-sign.svg'
+import creditArt1 from '../../assets/returns/pic-1.png'
+import creditArt2 from '../../assets/returns/pic-2.png'
 import './Returns.css'
 
-/* ---------- Illustration placeholder ---------- */
-function IllustrationSlot({ label, dark = false }: { label: string; dark?: boolean }) {
-  return (
-    <div className={`rt-slot${dark ? ' rt-slot--dark' : ''}`}>
-      <Photo size={26} />
-      <span>{label}</span>
-    </div>
-  )
-}
+/* Credit-leverage illustration candidates (assets/returns).
+   Swap the index to try the other: 0 = cascading scales (pic-1), 1 = lever (pic-2). */
+const CREDIT_ART = [creditArt1, creditArt2][0]
 
 /* ---------- Hero visual: animated "trading terminal" card ----------
    Illustrates exactly what the page shows: the portfolio curve draws
@@ -137,6 +132,214 @@ function HeroChart() {
   )
 }
 
+/* ---------- Returns chart — interactive period preview ----------
+   White card, blue→violet line drawn with the same pathLength mechanic as the
+   hero chart. The 3m / 6m / 1y switcher swaps the path (keyed remount redraws
+   the line), the month axis and the end-of-line % badge — visually proving the
+   caption's point: the longer you wait, the more convincing the growth. */
+type GraphPeriod = {
+  key: '3m' | '6m' | '1y'
+  label: string
+  pct: number
+  endY: number
+  /* dashed S&P 500 comparison line */
+  spPct: number
+  spEndY: number
+  sp: string
+  months: string[]
+  line: string
+}
+const GRAPH_PERIODS: GraphPeriod[] = [
+  {
+    key: '3m',
+    label: '3 міс.',
+    pct: 9,
+    endY: 204,
+    spPct: 3,
+    spEndY: 244,
+    sp: 'M0 258 C40 258 60 257 90 256 S140 253 170 254 S220 251 250 252 S300 249 330 250 S380 247 410 248 S450 245 480 244',
+    months: ['Січ', 'Лют', 'Бер'],
+    line: 'M0 258 C40 261 60 251 90 254 S140 241 170 247 S220 233 250 239 S300 225 330 231 S380 217 410 223 S450 207 480 204',
+  },
+  {
+    key: '6m',
+    label: '6 міс.',
+    pct: 19,
+    endY: 146,
+    spPct: 6,
+    spEndY: 230,
+    sp: 'M0 258 C40 257 60 258 90 254 S140 250 170 252 S220 246 250 248 S300 240 330 242 S380 236 410 236 S450 232 480 230',
+    months: ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер'],
+    line: 'M0 258 C40 253 60 257 90 246 S140 230 170 236 S220 208 250 214 S300 188 330 194 S380 168 410 172 S450 150 480 146',
+  },
+  {
+    key: '1y',
+    label: '1 рік',
+    pct: 45,
+    endY: 48,
+    spPct: 12,
+    spEndY: 202,
+    sp: 'M0 258 C40 256 60 257 90 252 S140 246 170 248 S220 238 250 240 S300 228 330 230 S380 216 410 218 S450 206 480 202',
+    months: ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'],
+    line: 'M0 258 C40 250 60 254 90 238 S140 214 170 220 S220 182 250 190 S300 142 330 148 S380 98 410 106 S450 62 480 48',
+  },
+]
+
+function ReturnsGraph() {
+  const [period, setPeriod] = useState<GraphPeriod['key']>('1y')
+  const p = GRAPH_PERIODS.find((g) => g.key === period)!
+  return (
+    <Reveal className="rt-graph" variant="fadeUp">
+      <div className="rt-graph__head">
+        <span className="rt-graph__label">Графік дохідності</span>
+        <div className="rt-graph__seg" role="group" aria-label="Період графіка">
+          {GRAPH_PERIODS.map((g) => (
+            <button
+              key={g.key}
+              type="button"
+              className="rt-graph__seg-btn"
+              aria-pressed={period === g.key}
+              onClick={() => setPeriod(g.key)}
+            >
+              {g.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rt-graph__legend" aria-hidden="true">
+        <span className="rt-graph__lg">
+          <i className="rt-graph__lg-algo" />
+          Наш алгоритм
+        </span>
+        <span className="rt-graph__lg">
+          <i className="rt-graph__lg-sp" />
+          S&amp;P 500
+        </span>
+      </div>
+
+      <div className="rt-graph__plot">
+        <div className="rt-graph__canvas" aria-hidden="true">
+          {/* static grid layer */}
+          <svg viewBox="0 0 480 300" preserveAspectRatio="none">
+            {[60, 120, 180, 240].map((y) => (
+              <line key={y} x1="0" x2="480" y1={y} y2={y} className="rt-graph__grid" />
+            ))}
+          </svg>
+          {/* data layer — continuous strokes revealed by a left→right wipe.
+             (No dash-based pathLength draw: dasharray + non-scaling-stroke on a
+             stretched viewBox renders the line broken in Chromium.) */}
+          <motion.div
+            key={`w-${p.key}`}
+            className="rt-graph__wipe"
+            initial={{ clipPath: 'inset(0 100% 0 0)' }}
+            whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.3, ease: easeOut, delay: 0.15 }}
+          >
+            <svg viewBox="0 0 480 300" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="rtGraphLine" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stopColor="#475ffa" />
+                  <stop offset="1" stopColor="#9e78ff" />
+                </linearGradient>
+                <linearGradient id="rtGraphFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#7a5fff" stopOpacity="0.2" />
+                  <stop offset="1" stopColor="#7a5fff" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path d={`${p.line} L480 300 L0 300 Z`} fill="url(#rtGraphFill)" />
+              <path d={p.sp} className="rt-graph__spline" />
+              <path
+                d={p.line}
+                fill="none"
+                stroke="url(#rtGraphLine)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </motion.div>
+          <motion.span
+            key={`d-${p.key}`}
+            className="rt-graph__dot"
+            style={{ left: '100%', top: `${(p.endY / 300) * 100}%` }}
+            initial={{ scale: 0, x: '-50%', y: '-50%' }}
+            whileInView={{ scale: 1, x: '-50%', y: '-50%' }}
+            viewport={viewportOnce}
+            transition={{ delay: 1.35, type: 'spring', stiffness: 300, damping: 16 }}
+          />
+          <motion.span
+            key={`p-${p.key}`}
+            className="rt-graph__pct num"
+            style={{ left: '100%', top: `${(p.endY / 300) * 100}%` }}
+            initial={{ opacity: 0, scale: 0.8, x: '-108%', y: '-140%' }}
+            whileInView={{ opacity: 1, scale: 1, x: '-108%', y: '-140%' }}
+            viewport={viewportOnce}
+            transition={{ delay: 1.5, type: 'spring', stiffness: 280, damping: 18 }}
+          >
+            +{p.pct}%
+          </motion.span>
+          <motion.span
+            key={`s-${p.key}`}
+            className="rt-graph__sp-pct num"
+            style={{ left: '100%', top: `${(p.spEndY / 300) * 100}%` }}
+            initial={{ opacity: 0, x: '-106%', y: '-50%' }}
+            whileInView={{ opacity: 1, x: '-106%', y: '-50%' }}
+            viewport={viewportOnce}
+            transition={{ delay: 1.6, duration: 0.35 }}
+          >
+            S&amp;P 500 · +{p.spPct}%
+          </motion.span>
+        </div>
+        <motion.div
+          key={`m-${p.key}`}
+          className="rt-graph__months"
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          {p.months.map((m) => (
+            <span key={m}>{m}</span>
+          ))}
+        </motion.div>
+      </div>
+
+      <p className="rt-graph__note">
+        Запустіть віртуальні торги і чекайте. Дивитися на результати потрібно{' '}
+        <button
+          type="button"
+          className="rt-graph__phrase"
+          aria-pressed={period === '3m'}
+          onClick={() => setPeriod('3m')}
+        >
+          мінімум через три місяці
+        </button>
+        ,{' '}
+        <button
+          type="button"
+          className="rt-graph__phrase"
+          aria-pressed={period === '6m'}
+          onClick={() => setPeriod('6m')}
+        >
+          бажано через пів року
+        </button>
+        ,{' '}
+        <button
+          type="button"
+          className="rt-graph__phrase"
+          aria-pressed={period === '1y'}
+          onClick={() => setPeriod('1y')}
+        >
+          краще через рік
+        </button>{' '}
+        — акціям потрібен час, щоб вирости в ціні.
+      </p>
+    </Reveal>
+  )
+}
+
 /* ---------- Data ---------- */
 const PRINCIPLES = [
   'Не day-trading',
@@ -191,6 +394,8 @@ const SCENARIOS: { tag: string; events: TlEvent[] }[] = [
 /* Compound interest: 1.03^m for 12 months (final +42.6% vs simple +36%) */
 const COMPOUND = Array.from({ length: 12 }, (_, i) => Math.pow(1.03, i + 1))
 const COMPOUND_MAX = COMPOUND[11] - 1 // 0.4258
+const COMP_TOP = 0.5 // chart ceiling → headroom above the 42.6% peak for its label
+const COMP_TICKS = [0.1, 0.2, 0.3, 0.4] // y-axis scale marks (10–40%)
 
 /* ---------- Scenario timeline (draw-on-scroll) ---------- */
 function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent[]; index: number }) {
@@ -240,54 +445,6 @@ function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent
         </div>
       </div>
     </Reveal>
-  )
-}
-
-/* ---------- Waiting timeline: 3 months → half a year → a year (draw-on-scroll) ---------- */
-function WaitTimeline() {
-  const milestones = [
-    { n: '3 місяці', d: 'мінімум', pos: 0 },
-    { n: 'Пів року', d: 'бажано', pos: 50 },
-    { n: 'Рік', d: 'краще', pos: 100 },
-  ]
-  return (
-    <div className="rt-wait__track">
-      <div className="rt-wait__linewrap" aria-hidden="true">
-        <motion.div
-          className="rt-wait__linefill"
-          initial={{ width: '0%' }}
-          whileInView={{ width: '100%' }}
-          viewport={viewportOnce}
-          transition={{ duration: 1.4, ease: easeOut, delay: 0.2 }}
-        />
-      </div>
-      {milestones.map((w, i) => (
-        <div
-          className={`rt-wait__ms${i === 0 ? ' rt-wait__ms--first' : ''}${
-            i === milestones.length - 1 ? ' rt-wait__ms--last' : ''
-          }`}
-          style={{ left: `${w.pos}%` }}
-          key={w.n}
-        >
-          <motion.span
-            className={`rt-wait__dot rt-wait__dot--${i}`}
-            initial={{ scale: 0 }}
-            whileInView={{ scale: 1 }}
-            viewport={viewportOnce}
-            transition={{
-              delay: 0.2 + (w.pos / 100) * 1.4,
-              type: 'spring',
-              stiffness: 320,
-              damping: 20,
-            }}
-          />
-          <div className="rt-wait__meta">
-            <strong>{w.n}</strong>
-            <span>{w.d}</span>
-          </div>
-        </div>
-      ))}
-    </div>
   )
 }
 
@@ -516,14 +673,12 @@ export function Returns() {
         {/* ============ 06 (03) · Credit leverage (navy) ============ */}
         <section className="section">
           <div className="container">
-            <Reveal className="feature-card" variant="fadeUp">
+            <Reveal className="feature-card rt-credit" variant="fadeUp">
               <span className="feature-card__grid" aria-hidden="true" />
-              <div className="feature-card__head">
-                <span className="feature-card__badge">Важливо</span>
-              </div>
-              <h2 className="feature-card__title">Кредитне плече 1:2</h2>
               <div className="rt-credit__grid2">
                 <div className="rt-credit__copy">
+                  <span className="feature-card__badge">Важливо</span>
+                  <h2 className="feature-card__title">Кредитне плече 1:2</h2>
                   <p>
                     За бажанням в Interactive Brokers можна і бажано взяти кредит для торгів під
                     приблизно 6% річних. Кредит надається в будь-якому обсязі, що не перевищує ваші
@@ -541,7 +696,9 @@ export function Returns() {
                     У всіх розрахунках і прикладах це кредитне плече 1:2 не враховується.
                   </p>
                 </div>
-                <IllustrationSlot dark label="Ілюстрація: 3D-терези / важіль 1:2" />
+                <div className="rt-credit__art">
+                  <img src={CREDIT_ART} alt="Кредитне плече 1:2 — важіль, що підсилює дохідність" />
+                </div>
               </div>
             </Reveal>
           </div>
@@ -554,31 +711,40 @@ export function Returns() {
             <div className="rt-comp">
               <Reveal className="rt-comp__viz" variant="fadeUp">
                 <div className="rt-comp__chart" role="img" aria-label="12 стовпчиків місяців: складний відсоток зростає до +42.6% проти +36% простого">
-                  <div className="rt-comp__simple" style={{ bottom: `${(0.36 / COMPOUND_MAX) * 100}%` }}>
-                    <span>простий %: +36%</span>
+                  {/* y-axis scale */}
+                  {COMP_TICKS.map((t) => (
+                    <div className="rt-comp__gl" key={t} style={{ bottom: `${(t / COMP_TOP) * 100}%` }}>
+                      <span>{Math.round(t * 100)}%</span>
+                    </div>
+                  ))}
+                  {/* simple-interest reference at 36% — label kept left, over the short bars */}
+                  <div className="rt-comp__simple" style={{ bottom: `${(0.36 / COMP_TOP) * 100}%` }}>
+                    <span className="rt-comp__simple-lbl">простий % · +36%</span>
                   </div>
+                  {/* compound peak at 42.6% — where the tallest bar tops out */}
+                  <motion.div
+                    className="rt-comp__peak"
+                    style={{ bottom: `${(COMPOUND_MAX / COMP_TOP) * 100}%` }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={viewportOnce}
+                    transition={{ delay: 1, duration: 0.4 }}
+                  >
+                    <span className="rt-comp__peak-lbl num">+42.6%</span>
+                  </motion.div>
                   {COMPOUND.map((v, i) => (
                     <div className="rt-comp__col" key={i}>
                       <motion.div
                         className="rt-comp__bar"
-                        style={{ height: `${((v - 1) / COMPOUND_MAX) * 100}%` }}
+                        style={{ height: `${((v - 1) / COMP_TOP) * 100}%` }}
                         initial={{ scaleY: 0 }}
                         whileInView={{ scaleY: 1 }}
                         viewport={viewportOnce}
-                        transition={{ delay: 0.15 + i * 0.07, duration: 0.5, ease: easeOut }}
+                        transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: easeOut }}
                       />
                       <span className="rt-comp__m">{i + 1}</span>
                     </div>
                   ))}
-                  <motion.span
-                    className="rt-comp__final num"
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={viewportOnce}
-                    transition={{ delay: 1.1, duration: 0.4 }}
-                  >
-                    +42.6%
-                  </motion.span>
                 </div>
                 <span className="rt-comp__axis">12 місяців · 3% на місяць · реінвест</span>
               </Reveal>
@@ -614,33 +780,27 @@ export function Returns() {
         {/* ============ 08 (05) · Verify on virtual trades ============ */}
         <section className="section">
           <div className="container">
-            <SectionHead
-              num="05"
-              title="Як перевірити, чи дійсно наші стратегії дохідні"
-              sub="На прикладі віртуальних торгів."
-            />
+            <Reveal className="head-center" variant="fadeBlur">
+              <h2 className="head-center__title">
+                Як перевірити, чи дійсно наші стратегії дохідні
+              </h2>
+              <p className="head-center__sub">На прикладі віртуальних торгів.</p>
+            </Reveal>
             <div className="rt-verify-a">
-              <div className="rt-verify-a__copy">
-                <Reveal className="rt-wait" variant="fadeUp">
-                  <WaitTimeline />
-                  <p className="rt-wait__caption">
-                    Запустіть віртуальні торги і чекайте. Дивитися на результати потрібно мінімум
-                    через три місяці, бажано через пів року, краще через рік — акціям потрібен час,
-                    щоб вирости в ціні.
-                  </p>
-                </Reveal>
-                <Reveal className="rt-office" variant="fadeUp" delay={0.08}>
-                  <span className="rt-icon rt-icon--sm">
-                    <Eye size={20} />
-                  </span>
+              <ReturnsGraph />
+              <Reveal className="rt-tip" variant="fadeUp" delay={0.05}>
+                <span className="rt-icon rt-icon--sm">
+                  <Eye size={20} />
+                </span>
+                <div className="rt-tip__body">
+                  <span className="rt-tip__k">Підказка</span>
                   <p>
                     До моменту торгів реальними коштами, при потребі, при відвідуванні нашого офісу
                     (інформація не на загал), ми можемо відкрити всі ваші дані по ваших віртуальних
                     торгах на вашому акаунті для підтвердження дохідності.
                   </p>
-                </Reveal>
-              </div>
-              <IllustrationSlot label="Ілюстрація: пісочний годинник / графік, що росте з часом" />
+                </div>
+              </Reveal>
             </div>
           </div>
         </section>
