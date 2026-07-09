@@ -337,6 +337,9 @@
 @media (max-width: 900px) {
   .algo__steps {
     flex-direction: column;
+    /* the decorative connector lines (which spaced the cards from the text on
+       desktop) are hidden below, so restore a proper head→cards gap here */
+    margin-top: clamp(40px, 8vw, 60px);
   }
   .algo__lines {
     display: none;
