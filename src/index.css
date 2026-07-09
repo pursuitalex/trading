@@ -69,7 +69,7 @@ html {
 body {
   min-height: 100dvh;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.6;
   color: var(--ink);
   background: var(--page-bg);
@@ -389,5 +389,31 @@ h4 {
   .anim-grid,
   .anim-hue {
     animation: none !important;
+  }
+}
+
+/* ============================================================
+   Mobile scale — compact the whole UI on phones. Placed last so these
+   overrides win the cascade. The root font-size shrinks everything rem-based
+   (text + rem spacing/radii) at once; the px overrides catch what rem can't.
+   ============================================================ */
+@media (max-width: 600px) {
+  :root {
+    font-size: 14.5px;
+    --nav-h: 62px; /* shorter header on phones */
+  }
+  .container {
+    padding-inline: 1.15rem;
+  }
+  .btn {
+    min-height: 44px;
+  }
+  .feature-card {
+    border-radius: 18px;
+  }
+}
+@media (max-width: 400px) {
+  :root {
+    font-size: 13.5px;
   }
 }
