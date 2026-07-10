@@ -356,3 +356,9 @@
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  .algo-card {
+    border-radius: 14px; /* halved on phones */
+  }
+}

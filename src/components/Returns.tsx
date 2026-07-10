@@ -1,5 +1,5 @@
-import { useMemo, useState, type CSSProperties } from 'react'
-import { motion } from 'framer-motion'
+import { useMemo, useRef, useState, type CSSProperties } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { Calculator, type CalcConfig } from './Calculator'
@@ -188,6 +188,11 @@ const GRAPH_PERIODS: GraphPeriod[] = [
 function ReturnsGraph() {
   const [period, setPeriod] = useState<GraphPeriod['key']>('1y')
   const p = GRAPH_PERIODS.find((g) => g.key === period)!
+  // Observe the full-size plot (not the tiny/def'd animated bits) and drive every
+  // animation off that flag with `animate` — so a missed IntersectionObserver on a
+  // 0-size or non-rendered element can't leave the line/badges stuck at their start.
+  const plotRef = useRef<HTMLDivElement>(null)
+  const drawn = useInView(plotRef, { once: true, margin: '-80px' })
   return (
     <Reveal className="rt-graph" variant="fadeUp">
       <div className="rt-graph__head">
@@ -218,7 +223,7 @@ function ReturnsGraph() {
         </span>
       </div>
 
-      <div className="rt-graph__plot">
+      <div className="rt-graph__plot" ref={plotRef}>
         <div className="rt-graph__canvas" aria-hidden="true">
           {/* static grid layer */}
           <svg viewBox="0 0 480 300" preserveAspectRatio="none">
@@ -229,14 +234,7 @@ function ReturnsGraph() {
           {/* data layer — continuous strokes revealed by a left→right wipe.
              (No dash-based pathLength draw: dasharray + non-scaling-stroke on a
              stretched viewBox renders the line broken in Chromium.) */}
-          <motion.div
-            key={`w-${p.key}`}
-            className="rt-graph__wipe"
-            initial={{ clipPath: 'inset(0 100% 0 0)' }}
-            whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
-            viewport={viewportOnce}
-            transition={{ duration: 1.3, ease: easeOut, delay: 0.15 }}
-          >
+          <div className="rt-graph__wipe">
             <svg viewBox="0 0 480 300" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="rtGraphLine" x1="0" y1="0" x2="1" y2="0">
@@ -247,26 +245,40 @@ function ReturnsGraph() {
                   <stop offset="0" stopColor="#7a5fff" stopOpacity="0.2" />
                   <stop offset="1" stopColor="#7a5fff" stopOpacity="0" />
                 </linearGradient>
+                {/* left→right reveal via a growing SVG clip rect — a reliable SVG
+                   attribute animation (unlike CSS clip-path), driven by `drawn`. */}
+                <clipPath id={`rtGraphReveal-${p.key}`}>
+                  <motion.rect
+                    key={p.key}
+                    x="0"
+                    y="0"
+                    height="300"
+                    initial={{ width: 0 }}
+                    animate={{ width: drawn ? 480 : 0 }}
+                    transition={{ duration: 1.3, ease: easeOut, delay: 0.15 }}
+                  />
+                </clipPath>
               </defs>
-              <path d={`${p.line} L480 300 L0 300 Z`} fill="url(#rtGraphFill)" />
-              <path d={p.sp} className="rt-graph__spline" />
-              <path
-                d={p.line}
-                fill="none"
-                stroke="url(#rtGraphLine)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                vectorEffect="non-scaling-stroke"
-              />
+              <g clipPath={`url(#rtGraphReveal-${p.key})`}>
+                <path d={`${p.line} L480 300 L0 300 Z`} fill="url(#rtGraphFill)" />
+                <path d={p.sp} className="rt-graph__spline" />
+                <path
+                  d={p.line}
+                  fill="none"
+                  stroke="url(#rtGraphLine)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </g>
             </svg>
-          </motion.div>
+          </div>
           <motion.span
             key={`d-${p.key}`}
             className="rt-graph__dot"
             style={{ left: '100%', top: `${(p.endY / 300) * 100}%` }}
             initial={{ scale: 0, x: '-50%', y: '-50%' }}
-            whileInView={{ scale: 1, x: '-50%', y: '-50%' }}
-            viewport={viewportOnce}
+            animate={{ scale: drawn ? 1 : 0, x: '-50%', y: '-50%' }}
             transition={{ delay: 1.35, type: 'spring', stiffness: 300, damping: 16 }}
           />
           <motion.span
@@ -274,8 +286,7 @@ function ReturnsGraph() {
             className="rt-graph__pct num"
             style={{ left: '100%', top: `${(p.endY / 300) * 100}%` }}
             initial={{ opacity: 0, scale: 0.8, x: '-108%', y: '-140%' }}
-            whileInView={{ opacity: 1, scale: 1, x: '-108%', y: '-140%' }}
-            viewport={viewportOnce}
+            animate={{ opacity: drawn ? 1 : 0, scale: drawn ? 1 : 0.8, x: '-108%', y: '-140%' }}
             transition={{ delay: 1.5, type: 'spring', stiffness: 280, damping: 18 }}
           >
             +{p.pct}%
@@ -285,8 +296,7 @@ function ReturnsGraph() {
             className="rt-graph__sp-pct num"
             style={{ left: '100%', top: `${(p.spEndY / 300) * 100}%` }}
             initial={{ opacity: 0, x: '-106%', y: '-50%' }}
-            whileInView={{ opacity: 1, x: '-106%', y: '-50%' }}
-            viewport={viewportOnce}
+            animate={{ opacity: drawn ? 1 : 0, x: '-106%', y: '-50%' }}
             transition={{ delay: 1.6, duration: 0.35 }}
           >
             S&amp;P 500 · +{p.spPct}%

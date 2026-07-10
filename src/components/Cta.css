@@ -162,7 +162,7 @@
 
 @media (max-width: 560px) {
   .cta__card {
-    border-radius: 28px;
+    border-radius: 14px;
   }
   .cta__perks {
     gap: 8px 14px;

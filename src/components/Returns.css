@@ -684,7 +684,10 @@
   gap: 7px;
   flex: 1; /* fills whatever extra height the taller Q&A column adds */
   min-height: 240px;
-  padding: 10px 0 0 42px; /* top headroom (peak label) + left gutter (y-axis scale) */
+  /* no top padding: bar heights are % of the content box while the reference
+     lines use bottom:% of the padding box — any top padding desyncs them, so the
+     42.6%/36% bars would stop short of their own guide lines. Left gutter only. */
+  padding: 0 0 0 42px; /* left gutter for the y-axis scale */
 }
 .rt-comp__col {
   position: relative;

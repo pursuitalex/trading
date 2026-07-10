@@ -381,3 +381,12 @@
     display: none;
   }
 }
+@media (max-width: 600px) {
+  .vt {
+    border-radius: 12px; /* halved on phones */
+  }
+  .vt__mark {
+    width: 55px; /* halved 3D sign */
+    margin-bottom: 22px;
+  }
+}

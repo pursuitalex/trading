@@ -915,6 +915,9 @@ main {
   .hero__cta .btn {
     flex: 1;
   }
+  .card {
+    border-radius: 14px; /* halved on phones */
+  }
   .card__figures {
     gap: 1.25rem;
   }
