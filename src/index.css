@@ -352,6 +352,52 @@ h4 {
   }
 }
 
+/* ---------- Amount-selector chips (shared primitive) ----------
+   Used by the Calculator (.calc-chips/.calc-chip) and Virtual-trades
+   (.vt__pills/.vt__pill) amount pickers. They are the same control, so they
+   share one definition here and must render identically on every breakpoint.
+   Their per-breakpoint sizing (incl. the phone compaction below) lives here too. */
+.calc-chips,
+.vt__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.calc-chip,
+.vt__pill {
+  min-height: 44px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: #ecf3ff;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1c222b;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+.calc-chip:hover:not(.active),
+.vt__pill:hover:not(.active) {
+  background: #dfeaff;
+}
+.calc-chip:active,
+.vt__pill:active {
+  transform: translateY(1px);
+}
+.calc-chip.active,
+.vt__pill.active {
+  color: #fff;
+  background: var(--brand-btn);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
 /* ---------- Keyframes ---------- */
 @keyframes blobDrift {
   0%,
@@ -410,6 +456,19 @@ h4 {
   }
   .feature-card {
     border-radius: 18px;
+  }
+  /* compact the amount chips on phones: smaller padding, radius, gap + font */
+  .calc-chips,
+  .vt__pills {
+    gap: 7px;
+    margin-top: 12px;
+  }
+  .calc-chip,
+  .vt__pill {
+    min-height: 36px;
+    padding: 8px 13px;
+    border-radius: 14px;
+    font-size: 13px;
   }
 }
 @media (max-width: 400px) {
