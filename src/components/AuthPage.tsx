@@ -1,7 +1,7 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Check, Eye, EyeOff } from './icons'
+import { ArrowRight, Check, Close, Eye, EyeOff } from './icons'
 import logoLight from '../../assets/logo/logo-light.svg'
 import logoDark from '../../assets/logo/logo-dark.svg'
 import './AuthPage.css'
@@ -227,9 +227,19 @@ export function AuthPage({ mode }: { mode: Mode }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Link to="/" className="auth__brand-mobile" aria-label="На головну">
-            <img src={logoDark} alt="Trading.com.ua" height={30} />
-          </Link>
+          <div className="auth__topbar">
+            <Link to="/" className="auth__brand-mobile" aria-label="На головну">
+              <img src={logoDark} alt="Trading.com.ua" height={30} />
+            </Link>
+            <button
+              type="button"
+              className="auth__close"
+              onClick={() => (window.history.length > 1 ? navigate(-1) : navigate('/'))}
+              aria-label="Закрити та повернутися назад"
+            >
+              <Close size={22} />
+            </button>
+          </div>
 
           <div className="auth__head">
             <h1 className="auth__title">{isRegister ? 'Створити акаунт' : 'Вхід в акаунт'}</h1>

@@ -123,6 +123,31 @@
 .auth__brand-mobile {
   display: none;
 }
+/* Mobile top bar: logo (left) + close/back (right); hidden on desktop */
+.auth__topbar {
+  display: none;
+}
+.auth__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px; /* nudge toward the card corner, keep a 40px tap target */
+  border-radius: 10px;
+  color: #6b7280;
+  background: transparent;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.auth__close:hover {
+  background: #f1f4f9;
+  color: var(--ink);
+}
+.auth__close:active {
+  transform: scale(0.96);
+}
 .auth__head {
   margin-bottom: 24px;
 }
@@ -311,9 +336,13 @@
   .auth__main {
     flex: 1;
   }
+  .auth__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+  }
   .auth__brand-mobile {
     display: flex;
-    justify-content: flex-start;
-    margin-bottom: 22px;
   }
 }
