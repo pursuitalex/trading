@@ -51,9 +51,8 @@ export function Faq() {
             FAQ
           </span>
           <h2 className="faq__title">
-            Розвіюємо сумніви: Все, що ви
-            <br />
-            хотіли запитати про <span className="faq__accent">Алготрейдинг</span>
+            Розвіюємо сумніви: Все, що ви хотіли запитати про{' '}
+            <span className="faq__accent">Алготрейдинг</span>
           </h2>
         </Reveal>
 
