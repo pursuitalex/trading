@@ -4,7 +4,7 @@
 
 .footer {
   /* top gap comes from main's padding-bottom; this is the page-end gap */
-  padding-bottom: clamp(72px, 10vw, 140px);
+  padding-bottom: 80px;
 }
 .footer__inner {
   display: flex;
@@ -15,12 +15,14 @@
 
 /* ---- nav menu ---- */
 .footer__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  /* full-width row: each link gets an equal 1fr slot, left-aligned within it */
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  width: 100%;
 }
 .footer__nav-link {
-  padding: 10px 16px;
+  padding: 0;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 14px;
@@ -34,10 +36,10 @@
 
 /* ---- main row ---- */
 .footer__main {
-  display: flex;
+  /* 60/40 grid: the right column starts exactly on the "Ціни" nav slot (60%) */
+  display: grid;
+  grid-template-columns: 3fr 2fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 48px;
   width: 100%;
 }
 
@@ -49,7 +51,7 @@
 .footer__logo {
   position: relative;
   display: inline-block;
-  width: clamp(300px, 44vw, 560px);
+  width: clamp(255px, 37.4vw, 476px); /* reduced 15% */
 }
 .footer__logo-img {
   width: 100%;
@@ -62,7 +64,7 @@
   right: 0;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: clamp(1rem, 2vw, 1.6rem); /* ~30px at desktop */
+  font-size: clamp(0.85rem, 1.7vw, 1.36rem); /* ~25px — logo reduced 15% */
   letter-spacing: -0.04em;
   line-height: 1.05;
   color: #4a4d61;
@@ -78,8 +80,7 @@
 
 /* disclaimer */
 .footer__disclaimer {
-  flex: none;
-  width: 453px;
+  min-width: 0;
   max-width: 100%;
   display: flex;
   flex-direction: column;
@@ -146,10 +147,11 @@
   width: 100%;
   border-top: 1px solid #e8e9eb;
   padding-top: 40px;
-  display: flex;
+  /* same 60/40 grid so the legal links line up under the disclaimer / "Ціни" */
+  display: grid;
+  grid-template-columns: 3fr 2fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px 40px;
+  gap: 16px 0;
 }
 .footer__copy {
   font-family: var(--font-body);
@@ -161,7 +163,7 @@
   display: flex;
   justify-content: space-between;
   gap: clamp(20px, 4vw, 48px);
-  width: 453px;
+  min-width: 0;
   max-width: 100%;
 }
 .footer__legal-link {
@@ -178,6 +180,7 @@
 /* ---- responsive ---- */
 @media (max-width: 900px) {
   .footer__main {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 40px;
@@ -200,12 +203,18 @@
   }
   .footer__nav {
     order: 2;
+    /* phone: don't force 5 cramped columns — let the links wrap */
+    display: flex;
+    flex-wrap: wrap;
+    grid-auto-columns: initial;
+    gap: 12px 20px;
   }
   .footer__disclaimer {
     order: 3;
   }
   .footer__bottom {
     order: 4;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
