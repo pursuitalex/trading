@@ -98,8 +98,7 @@ function CompareBars() {
                 className="adv-bars__bar"
                 style={{ height: `${b.pct}%` }}
                 initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={viewportOnce}
+                animate={{ scaleY: 1 }}
                 transition={{ delay: 0.3 + i * 0.1, duration: 0.6, ease: easeOut }}
               />
             </div>

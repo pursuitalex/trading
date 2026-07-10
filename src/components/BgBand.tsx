@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useTransform } from 'framer-motion'
-import { useEffect } from 'react'
+import { motion, useInView, useMotionValue, useTransform } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 import { CircleCheck, CircleX, User } from './icons'
 import { fadeUp, stagger, viewportOnce } from '../lib/motion'
 import iconFind from '../../assets/img-icons/icon-find.png'
@@ -97,6 +97,10 @@ export function BgBand() {
 
   // Fully opaque by the time the heading reaches the middle; fades back out as the section leaves.
   const bgOpacity = useTransform(progress, [0, 1], [0, 1])
+  // algo connector lines + nodes draw when the section scrolls in — useInView +
+  // animate, since object whileInView is suppressed inside the .algo__inner stagger parent.
+  const linesRef = useRef<SVGSVGElement>(null)
+  const linesDrawn = useInView(linesRef, viewportOnce)
 
   return (
     <>
@@ -121,6 +125,7 @@ export function BgBand() {
           </motion.div>
 
           <svg
+            ref={linesRef}
             className="algo__lines"
             viewBox="13.62 0 952.1 96"
             fill="none"
@@ -136,8 +141,7 @@ export function BgBand() {
                   width="980"
                   fill="#fff"
                   initial={{ height: 0 }}
-                  whileInView={{ height: 96 }}
-                  viewport={viewportOnce}
+                  animate={{ height: linesDrawn ? 96 : 0 }}
                   transition={{ duration: 1, ease: LINE_EASE }}
                 />
               </mask>
@@ -155,8 +159,7 @@ export function BgBand() {
                 cy="93"
                 r="6.5"
                 initial={{ scale: 0, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={viewportOnce}
+                animate={{ scale: linesDrawn ? 1 : 0, opacity: linesDrawn ? 1 : 0 }}
                 transition={{ duration: 0.4, delay: 1, ease: NODE_EASE }}
               />
             ))}

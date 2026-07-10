@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
@@ -150,16 +151,18 @@ function PricingCard() {
    special about it (negotiable), echoing the compound-interest chart on
    the Дохідність page (same scaleY-on-scroll bar technique). */
 function TierChart() {
+  // useInView + animate: object whileInView is suppressed inside the <Reveal pr-tiers> parent.
+  const ref = useRef<HTMLDivElement>(null)
+  const drawn = useInView(ref, viewportOnce)
   return (
-    <div className="pr-chart" role="img" aria-label="Стовпчикова діаграма: комісія зростає від 15% до 35% залежно від суми на рахунку">
+    <div className="pr-chart" ref={ref} role="img" aria-label="Стовпчикова діаграма: комісія зростає від 15% до 35% залежно від суми на рахунку">
       {TIERS.map((t, i) => (
         <div className={`pr-chart__col${t.top ? ' pr-chart__col--top' : ''}`} key={t.range}>
           {t.top && <span className="pr-chart__flag">Можлива знижка</span>}
           <motion.span
             className="pr-chart__value num"
             initial={{ opacity: 0, y: 6 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewportOnce}
+            animate={drawn ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
             transition={{ delay: 0.5 + i * 0.1, duration: 0.35 }}
           >
             {t.pct}%
@@ -169,8 +172,7 @@ function TierChart() {
               className="pr-chart__bar"
               style={{ height: `${(t.pct / TIER_MAX) * 100}%` }}
               initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={viewportOnce}
+              animate={{ scaleY: drawn ? 1 : 0 }}
               transition={{ delay: 0.15 + i * 0.1, duration: 0.5, ease: easeOut }}
             />
           </div>

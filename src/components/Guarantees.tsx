@@ -1,10 +1,11 @@
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
+import { useRef } from 'react'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { CtaLive } from './CtaLive'
 import { CountUp, Reveal, SectionHead } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
-import { easeOut } from '../lib/motion'
+import { easeOut, viewportOnce } from '../lib/motion'
 import {
   Calendar,
   Check,
@@ -174,6 +175,9 @@ function GuaranteeShield() {
    text+icon card, since it illustrates "you control access" far more
    directly than prose. Toggle slides on once scrolled into view. */
 function AccessMockup() {
+  // useInView + animate: object whileInView is suppressed inside the <Reveal> parent.
+  const ref = useRef<HTMLSpanElement>(null)
+  const drawn = useInView(ref, viewportOnce)
   return (
     <Reveal className="grt-access" variant="fadeUp" delay={0.1}>
       <div className="grt-access__head">
@@ -187,12 +191,11 @@ function AccessMockup() {
           <strong>Дозвіл на торгівлю</strong>
           <span>Trading.com.ua</span>
         </div>
-        <span className="grt-access__toggle" aria-hidden="true">
+        <span className="grt-access__toggle" aria-hidden="true" ref={ref}>
           <motion.span
             className="grt-access__knob"
             initial={{ x: 2 }}
-            whileInView={{ x: 20 }}
-            viewport={{ once: true, margin: '-80px' }}
+            animate={{ x: drawn ? 20 : 2 }}
             transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 20 }}
           />
         </span>
