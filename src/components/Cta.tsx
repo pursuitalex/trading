@@ -41,7 +41,7 @@ export function Cta() {
 
             <Reveal className="cta__btn-wrap" variant="fadeUp" delay={0.15}>
               <Link to="/register" className="cta__btn">
-                <Rocket size={24} />
+                <Rocket size={18} />
                 <span>Запустити Алготрейдинг</span>
               </Link>
             </Reveal>

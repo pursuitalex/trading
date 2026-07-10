@@ -302,9 +302,9 @@ main {
     gap: 18px;
   }
   .navmenu__btn {
-    height: 60px;
-    border-radius: 14px;
-    font-size: 18px;
+    height: 52px;
+    border-radius: 12px;
+    font-size: 16px;
   }
   .navmenu__note {
     font-size: 15px;
@@ -532,9 +532,9 @@ main {
   margin-top: 0.4rem;
 }
 .hero__cta .btn {
-  min-height: 56px;
-  padding: 0 2.2rem;
-  font-size: 1.05rem;
+  min-height: 52px;
+  padding: 0 1.9rem;
+  font-size: 1rem;
 }
 
 /* ---------------- Account card ---------------- */

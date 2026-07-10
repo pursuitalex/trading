@@ -84,7 +84,7 @@ export function CtaLive({
                 {secondary.label}
               </Link>
               <Link to={primary.to} className="cta-live__btn cta-live__btn--solid">
-                <Rocket size={20} />
+                <Rocket size={18} />
                 {primary.label}
               </Link>
             </div>

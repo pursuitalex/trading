@@ -145,19 +145,17 @@ const SOLID_DUPES = [
   { cls: 'cta__btn', src: '.cta__btn · Cta.css' },
   { cls: 'cta-live__btn cta-live__btn--solid', src: '.cta-live__btn--solid · CtaLive.css' },
   { cls: 'ct-submit', src: '.ct-submit · Contacts.css' },
-  { cls: 'pr-cta__btn pr-cta__btn--solid', src: '.pr-cta__btn--solid · Pricing.css' },
   { cls: 'footer__btn footer__btn--solid', src: '.footer__btn--solid · Footer.css' },
 ]
 const OUTLINE_DUPES = [
   { cls: 'footer__btn footer__btn--outline', src: 'border #686a7b · Footer.css' },
-  { cls: 'pr-cta__btn pr-cta__btn--outline', src: 'border #c9cedd · Pricing.css' },
   { cls: 'cta-live__btn cta-live__btn--ghost', src: 'border #e8e9eb · CtaLive.css' },
   { cls: 'cases__btn cases__btn--outline', src: 'border #686a7b · Cases.css' },
 ]
 
 /* ---------- refactor plan (top consolidation opportunities) ---------- */
 const REFACTOR: [what: string, state: string, target: string][] = [
-  ['Buttons', '~20 implementations across 12 files', 'One .btn system: primary / light / outline / ghost + sizes'],
+  ['Buttons', 'висоти зведено → 52 / 48 / 44 · класи ще дублюються (~12 файлів)', 'One .btn system: primary / light / outline / ghost + sizes'],
   ['White card', '~16 copies · radii 18/20/24 · shadow α .10/.12/.16', 'One .card + radius & elevation tokens'],
   ['Eyebrow badge', '8 copies (light ×3, dark ×5)', 'Two shared classes: .eyebrow--light / --dark'],
   ['Green status pill', '4 copies', 'One .pill--live'],
@@ -418,7 +416,7 @@ export function DesignSystem() {
 
             <div className="ds-group">
               <h3 className="ds-h3">
-                Ті ж «solid» кнопки з 6 файлів <span className="ds-h3__note">виглядають однаково — різні класи</span>
+                Ті ж «solid» кнопки з різних файлів <span className="ds-h3__note">висоти зведено до 52/48/44 · класи ще різні</span>
               </h3>
               <div className="ds-card ds-dupes">
                 {SOLID_DUPES.map((b) => (

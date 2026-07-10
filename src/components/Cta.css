@@ -122,14 +122,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: 60px;
-  padding: 10px 32px;
+  height: 52px;
+  padding: 0 26px;
   border-radius: 12px;
   background: var(--brand-btn);
   color: #fff;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 18px;
+  font-size: 16px;
   box-shadow: 0 12px 30px rgba(71, 95, 250, 0.45);
   transition:
     background 0.2s ease,
