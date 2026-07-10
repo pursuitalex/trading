@@ -1,13 +1,5 @@
-import { useRef, useState, type ReactNode } from 'react'
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-  useTransform,
-} from 'framer-motion'
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { Navbar } from './Navbar'
 import { Footer } from './Footer'
 import { CtaLive } from './CtaLive'
@@ -206,43 +198,85 @@ function SetupFlowCard() {
   )
 }
 
+/* One step in the path. Its own in-view flag drives the reveal and reports up,
+   so the connecting line can extend to the next node the moment it appears. */
+function HowStep({
+  step,
+  index,
+  onReveal,
+}: {
+  step: (typeof STEPS)[number]
+  index: number
+  onReveal: (i: number) => void
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true, margin: '0px 0px -25% 0px' })
+  useEffect(() => {
+    if (inView) onReveal(index)
+  }, [inView, index, onReveal])
+
+  const Icon = step.icon
+  const reversed = index % 2 === 1
+  const illustration = (
+    <motion.div
+      className="how-path__illustration"
+      initial={{ opacity: 0, scale: 0.6 }}
+      animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
+      transition={{ delay: 0.05, type: 'spring', stiffness: 260, damping: 20 }}
+    >
+      <span className="how-path__icon">
+        <Icon size={26} />
+      </span>
+    </motion.div>
+  )
+  const card = (
+    <motion.div
+      className="how-path__card"
+      initial={{ opacity: 0, x: reversed ? -26 : 26 }}
+      animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: reversed ? -26 : 26 }}
+      transition={{ delay: 0.18, duration: 0.5, ease: easeOut }}
+    >
+      <h3 className="how-path__title">{step.title}</h3>
+      <p className="how-path__text">{step.text}</p>
+      {step.notes.map((n) => (
+        <p className="how-path__note" key={n}>
+          {n}
+        </p>
+      ))}
+    </motion.div>
+  )
+  return (
+    <div className="how-path__row" ref={ref}>
+      {reversed ? card : illustration}
+      <motion.span
+        className="how-path__node"
+        initial={{ scale: 0 }}
+        animate={{ scale: inView ? 1 : 0 }}
+        transition={{ delay: 0.12, type: 'spring', stiffness: 320, damping: 18 }}
+      >
+        {index + 1}
+      </motion.span>
+      {reversed ? illustration : card}
+    </div>
+  )
+}
+
 export function HowToStart() {
   const [open, setOpen] = useState<number | null>(0)
   const marquee = useMarqueeSpeed()
   const loop = [...TICKER, ...TICKER, ...TICKER, ...TICKER]
 
-  // Path line: tracks scroll progress through the section, but one-way
-  // (a ratchet — never rewinds if the reader scrolls back up) and eased
-  // through a spring so it visibly "runs" between steps rather than
-  // snapping to the raw scroll position.
-  const pathRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress: pathProgress } = useScroll({
-    target: pathRef,
-    offset: ['start end', 'end center'],
-  })
-  const maxProgress = useMotionValue(pathProgress.get())
-  useMotionValueEvent(pathProgress, 'change', (latest) => {
-    if (latest > maxProgress.get()) maxProgress.set(latest)
-  })
-  const smoothProgress = useSpring(maxProgress, { stiffness: 100, damping: 24, mass: 0.6 })
-  const lineHeight = useTransform(smoothProgress, [0, 1], ['0%', '100%'])
-
-  // A step reveals only once the (smoothed) line has actually reached its
-  // node — gated by the same value driving the line's visual height, so the
-  // two can never fall out of sync. Latching keeps it one-way too.
-  const [revealed, setRevealed] = useState<boolean[]>(() => STEPS.map(() => false))
-  useMotionValueEvent(smoothProgress, 'change', (latest) => {
-    setRevealed((prev) => {
-      let changed = false
-      const next = prev.map((r, i) => {
-        if (r) return true
-        const frac = i / (STEPS.length - 1)
-        if (latest >= frac) changed = true
-        return latest >= frac
-      })
-      return changed ? next : prev
-    })
-  })
+  // Steps reveal on scroll trigger — each row fires its own in-view flag as it
+  // scrolls up (see HowStep), so they appear evenly and only while on screen.
+  // The connecting line is driven off the furthest-revealed step: the moment a
+  // step appears, the line extends forward to the next node, staying in
+  // lock-step with the reveals instead of chasing the raw scroll position.
+  const [maxRevealed, setMaxRevealed] = useState(-1)
+  const onReveal = useCallback((i: number) => {
+    setMaxRevealed((m) => (i > m ? i : m))
+  }, [])
+  const lineTargetPct =
+    maxRevealed < 0 ? 0 : (Math.min(maxRevealed + 1, STEPS.length - 1) / (STEPS.length - 1)) * 100
 
   return (
     <>
@@ -358,57 +392,18 @@ export function HowToStart() {
                 Interactive Brokers.
               </p>
             </Reveal>
-            <div className="how-path" ref={pathRef}>
+            <div className="how-path">
               <div className="how-path__linewrap" aria-hidden="true">
-                <motion.div className="how-path__linefill" style={{ height: lineHeight }} />
+                <motion.div
+                  className="how-path__linefill"
+                  initial={{ height: '0%' }}
+                  animate={{ height: `${lineTargetPct}%` }}
+                  transition={{ duration: 0.5, ease: easeOut }}
+                />
               </div>
-              {STEPS.map((s, i) => {
-                const Icon = s.icon
-                const reversed = i % 2 === 1
-                const isRevealed = revealed[i]
-                const illustration = (
-                  <motion.div
-                    className="how-path__illustration"
-                    initial={{ opacity: 0, scale: 0.6 }}
-                    animate={isRevealed ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.6 }}
-                    transition={{ delay: 0.05, type: 'spring', stiffness: 260, damping: 20 }}
-                  >
-                    <span className="how-path__icon">
-                      <Icon size={26} />
-                    </span>
-                  </motion.div>
-                )
-                const card = (
-                  <motion.div
-                    className="how-path__card"
-                    initial={{ opacity: 0, x: reversed ? -26 : 26 }}
-                    animate={isRevealed ? { opacity: 1, x: 0 } : { opacity: 0, x: reversed ? -26 : 26 }}
-                    transition={{ delay: 0.18, duration: 0.5, ease: easeOut }}
-                  >
-                    <h3 className="how-path__title">{s.title}</h3>
-                    <p className="how-path__text">{s.text}</p>
-                    {s.notes.map((n) => (
-                      <p className="how-path__note" key={n}>
-                        {n}
-                      </p>
-                    ))}
-                  </motion.div>
-                )
-                return (
-                  <div className="how-path__row" key={s.title}>
-                    {reversed ? card : illustration}
-                    <motion.span
-                      className="how-path__node"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: isRevealed ? 1 : 0 }}
-                      transition={{ delay: 0.12, type: 'spring', stiffness: 320, damping: 18 }}
-                    >
-                      {i + 1}
-                    </motion.span>
-                    {reversed ? illustration : card}
-                  </div>
-                )
-              })}
+              {STEPS.map((s, i) => (
+                <HowStep key={s.title} step={s} index={i} onReveal={onReveal} />
+              ))}
             </div>
           </div>
         </section>
