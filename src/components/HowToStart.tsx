@@ -13,7 +13,7 @@ import { Footer } from './Footer'
 import { CtaLive } from './CtaLive'
 import { CountUp, Reveal } from './primitives'
 import { useMarqueeSpeed } from '../lib/marquee'
-import { easeOut, viewportOnce } from '../lib/motion'
+import { easeOut } from '../lib/motion'
 import {
   Rocket,
   ChevronDown,
@@ -162,8 +162,7 @@ function SetupFlowCard() {
           <motion.div
             className="how-flow__linefill"
             initial={{ height: '0%' }}
-            whileInView={{ height: '100%' }}
-            viewport={viewportOnce}
+            animate={{ height: '100%' }}
             transition={{ duration: 1.6, ease: easeOut, delay: 0.2 }}
           />
         </div>
@@ -175,15 +174,13 @@ function SetupFlowCard() {
               <motion.span
                 className="how-flow__dot"
                 initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={viewportOnce}
+                animate={{ scale: 1 }}
                 transition={{ delay: 0.2 + frac * 1.6, type: 'spring', stiffness: 320, damping: 18 }}
               />
               <motion.span
                 className="how-flow__label"
                 initial={{ opacity: 0, x: -6 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={viewportOnce}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 + frac * 1.6, duration: 0.35 }}
               >
                 {label}

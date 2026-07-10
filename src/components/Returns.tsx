@@ -409,16 +409,20 @@ const COMP_TICKS = [0.1, 0.2, 0.3, 0.4] // y-axis scale marks (10–40%)
 
 /* ---------- Scenario timeline (draw-on-scroll) ---------- */
 function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent[]; index: number }) {
+  // Draw is gated by a useInView flag + explicit `animate` rather than nested
+  // whileInView: inside the <Reveal> variant parent, a child's whileInView doesn't
+  // stop variant propagation, so the timeline never ran its own draw. `animate` does.
+  const areaRef = useRef<HTMLDivElement>(null)
+  const drawn = useInView(areaRef, viewportOnce)
   return (
     <Reveal className="rt-tl" variant="fadeUp" delay={index * 0.08}>
       <span className="rt-tl__tag">{tag}</span>
-      <div className="rt-tl__area">
+      <div className="rt-tl__area" ref={areaRef}>
         <div className="rt-tl__linewrap" style={{ '--n': events.length } as CSSProperties} aria-hidden="true">
           <motion.div
             className="rt-tl__linefill"
             initial={{ width: '0%' }}
-            whileInView={{ width: '100%' }}
-            viewport={viewportOnce}
+            animate={{ width: drawn ? '100%' : '0%' }}
             transition={{ duration: 1.5, ease: easeOut, delay: 0.2 + index * 0.15 }}
           />
         </div>
@@ -430,8 +434,7 @@ function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent
                 <motion.span
                   className="rt-tl__dot"
                   initial={{ scale: 0 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={viewportOnce}
+                  animate={{ scale: drawn ? 1 : 0 }}
                   transition={{
                     delay: 0.2 + index * 0.15 + frac * 1.5,
                     type: 'spring',
@@ -442,8 +445,7 @@ function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent
                 <motion.div
                   className="rt-tl__meta"
                   initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={viewportOnce}
+                  animate={drawn ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
                   transition={{ delay: 0.35 + index * 0.15 + frac * 1.5, duration: 0.4 }}
                 >
                   <span className="rt-tl__time">{e.t}</span>
@@ -460,6 +462,11 @@ function ScenarioTimeline({ tag, events, index }: { tag: string; events: TlEvent
 
 export function Returns() {
   const marquee = useMarqueeSpeed()
+  // Compound chart draws when scrolled into view — useInView + explicit `animate`,
+  // because a nested whileInView inside the <Reveal> parent doesn't fire (the parent's
+  // variant propagation overrides it; same reason as ScenarioTimeline above).
+  const compRef = useRef<HTMLDivElement>(null)
+  const compDrawn = useInView(compRef, viewportOnce)
   const calcConfig = useMemo<CalcConfig>(() => {
     const max = new Date()
     max.setHours(0, 0, 0, 0)
@@ -720,7 +727,7 @@ export function Returns() {
             <SectionHead num="04" title="Так працює складний відсоток" />
             <div className="rt-comp">
               <Reveal className="rt-comp__viz" variant="fadeUp">
-                <div className="rt-comp__chart" role="img" aria-label="12 стовпчиків місяців: складний відсоток зростає до +42.6% проти +36% простого">
+                <div className="rt-comp__chart" ref={compRef} role="img" aria-label="12 стовпчиків місяців: складний відсоток зростає до +42.6% проти +36% простого">
                   {/* y-axis scale */}
                   {COMP_TICKS.map((t) => (
                     <div className="rt-comp__gl" key={t} style={{ bottom: `${(t / COMP_TOP) * 100}%` }}>
@@ -736,8 +743,7 @@ export function Returns() {
                     className="rt-comp__peak"
                     style={{ bottom: `${(COMPOUND_MAX / COMP_TOP) * 100}%` }}
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={viewportOnce}
+                    animate={{ opacity: compDrawn ? 1 : 0 }}
                     transition={{ delay: 1, duration: 0.4 }}
                   >
                     <span className="rt-comp__peak-lbl num">+42.6%</span>
@@ -748,8 +754,7 @@ export function Returns() {
                         className="rt-comp__bar"
                         style={{ height: `${((v - 1) / COMP_TOP) * 100}%` }}
                         initial={{ scaleY: 0 }}
-                        whileInView={{ scaleY: 1 }}
-                        viewport={viewportOnce}
+                        animate={{ scaleY: compDrawn ? 1 : 0 }}
                         transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: easeOut }}
                       />
                       <span className="rt-comp__m">{i + 1}</span>
