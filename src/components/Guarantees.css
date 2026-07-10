@@ -924,9 +924,9 @@
       180deg,
       #1c2e4e 0%,
       #1c2e4e 54%,
-      rgba(28, 46, 78, 0.9) 66%,
-      rgba(28, 46, 78, 0.4) 84%,
-      rgba(28, 46, 78, 0) 100%
+      rgba(28, 46, 78, 0.9) 58%,
+      rgba(28, 46, 78, 0.4) 64%,
+      rgba(28, 46, 78, 0) 70%
     );
   }
   .grt-inc__text {
@@ -939,6 +939,28 @@
   }
   .grt-inc__ww {
     width: 100%;
+  }
+}
+
+/* Tablet (561–1024px): take the copy out of absolute positioning so its
+   top/bottom padding + content drive the whole block's height (it grows/shrinks
+   vertically with the padding), instead of the height being locked to the
+   background render. The render becomes a cover fill behind the copy. */
+@media (min-width: 561px) and (max-width: 1024px) {
+  .grt-inc__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .grt-inc__bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: right center;
+  }
+  .grt-inc__copy {
+    position: relative;
+    inset: auto;
   }
 }
 
