@@ -889,13 +889,36 @@ main {
   }
 }
 
-@media (max-width: 900px) {
-  .nav__links,
+/* Below ~1120px the six inline links start to crowd the CTAs — collapse them
+   into the burger but KEEP the CTAs on the right: logo · gap · CTAs · burger. */
+@media (max-width: 1120px) {
+  .nav__links {
+    display: none;
+  }
+  .nav__actions {
+    margin-left: auto; /* links gone → push the CTAs to the right edge */
+  }
+  .nav__burger {
+    display: inline-flex;
+    margin-left: 0; /* sits directly after the CTAs, not pushed away */
+  }
+}
+/* Tablet: tighten the pill — half the inter-element gap and slimmer side padding
+   (overrides the wider .container padding-inline for the nav bar only). */
+@media (min-width: 561px) and (max-width: 1120px) {
+  /* .container.nav__inner (0,2,0) beats the shared .container padding-inline (0,1,0) */
+  .nav__inner.container {
+    gap: 1rem;
+    padding-inline: 24px;
+  }
+}
+/* Phone: no room for the CTAs beside logo + burger — they move into the menu. */
+@media (max-width: 560px) {
   .nav__actions {
     display: none;
   }
   .nav__burger {
-    display: inline-flex;
+    margin-left: auto;
   }
 }
 
