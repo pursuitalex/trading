@@ -8,6 +8,14 @@ main > section + section {
 }
 main {
   padding-bottom: clamp(44px, 9vw, 120px);
+  /* Entrance animations briefly offset children to the right (translateX), which
+     would make the page horizontally scrollable. Because the header is
+     position:fixed spanning the layout viewport, that overflow stretches the bar
+     and pushes the burger off-screen at the top — until you scroll past the
+     animated elements and they settle. Clip it so the page width never grows.
+     `clip` (not `hidden`) avoids creating a scroll container, so window scroll,
+     sticky, and scroll-linked motion keep working. */
+  overflow-x: clip;
 }
 
 /* ---------------- Navbar ---------------- */
@@ -194,16 +202,16 @@ main {
   min-width: 0;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 24px;
-  line-height: 28px;
+  font-size: 20px;
+  line-height: 26px;
   letter-spacing: -0.02em;
   color: #1a1e35;
   transition: color 0.18s ease;
 }
 .navmenu__arrow {
   flex: none;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   margin-top: 1px;
   color: #9aa0b4;
   transition:
@@ -291,12 +299,12 @@ main {
     font-size: 14px;
   }
   .navmenu__label {
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 24px;
+    line-height: 30px;
   }
   .navmenu__arrow {
-    width: 34px;
-    height: 34px;
+    width: 24px;
+    height: 24px;
   }
   .navmenu__buttons {
     gap: 18px;
