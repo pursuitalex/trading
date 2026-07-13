@@ -8,8 +8,8 @@ import purseIcon from '../../assets/purse-icon.svg'
 import checkIcon from '../../assets/check-icon.svg'
 
 const BULLETS = [
-  'Автоматично ведемо торговлю через API',
-  'Акції і кошти зберігаються на Interactive Brokers',
+  'Ваші акції і кошти зберігаються на InteractiveBrokers',
+  'Автоматично ведемо ними алгоритмічну торгівлю',
   'Алгоритми розроблені компанією SoftGroup',
 ]
 
@@ -128,7 +128,7 @@ export function Hero() {
               <i className="hl-corner hl-corner--tr" />
               <i className="hl-corner hl-corner--bl" />
               <i className="hl-corner hl-corner--br" />
-              <span className="hl-green">40–80% річних</span>
+              <span className="hl-green">45%+ річних</span>
             </motion.span>
           </motion.h1>
 
