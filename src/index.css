@@ -470,6 +470,16 @@ h4 {
     border-radius: 14px;
     font-size: 13px;
   }
+  /* Hero subtitles: the global rem down-scale shrinks these to ~13–14px on
+     phones — pin them to 17px so they stay readable. `.XX-hero .XX-hero__lead`
+     (0,2,0) beats each page's base `.XX-hero__lead` (0,1,0). */
+  .rt-hero .rt-hero__lead,
+  .grt-hero .grt-hero__lead,
+  .adv-hero .adv-hero__lead,
+  .pr-hero .pr-hero__lead,
+  .how-hero .how-hero__lead {
+    font-size: 16px;
+  }
 }
 @media (max-width: 400px) {
   :root {
